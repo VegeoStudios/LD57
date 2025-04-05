@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -11,9 +11,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - WorldResource
+  - Player
+  - Ship
   - 
   - 
   - 
@@ -38,6 +38,23 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 280807519
+    locked: 0
+  - name: ShipFloor
+    uniqueID: 2324662297
+    locked: 0
+  - name: ShipDefault
+    uniqueID: 1265431271
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Player
+    uniqueID: 768657699
+    locked: 0
+  - name: ShipForeground
+    uniqueID: 1760806045
+    locked: 0
+  m_RenderingLayers:
+  - Default

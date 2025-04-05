@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb508fdb47974d1498bd0229a41a4062, type: 3}
+  m_Name: ReducedPowerDemand
+  m_EditorClassIdentifier: 
+  Result:
+    Item: {fileID: 11400000, guid: c8a8f34745acf114aad7fee951b536f3, type: 2}
+    Amount: 1
+  Ingredients:
+  - Item: {fileID: 11400000, guid: e8982fb35e8e9184ba861011045f88f4, type: 2}
+    Amount: 15
+  - Item: {fileID: 11400000, guid: 8c44923c74d590641ad4db09b2680b32, type: 2}
+    Amount: 5
+  CraftingTime: 2
