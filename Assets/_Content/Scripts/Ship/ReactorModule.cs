@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -54,7 +53,7 @@ public class ReactorModule : ShipModule
 	{
 		get
 		{
-			return GetModifiedValue(ModifiedStat.ReactorFuelConsumption, _startingReactorFuelConsumption);
+			return GetModifiedValue(ModifierStatType.ReactorFuelConsumption, _startingReactorFuelConsumption);
 		}
 	}
 	#endregion Properties

@@ -16,8 +16,22 @@ public class ShipSystemsManager : MonoBehaviour
         {
             return _instance ?? (_instance = new ShipSystemsManager());
         }
+        set
+        {
+            _instance = value;
+        }
     }
 	#endregion Singleton
+
+	#region Construction
+    /// <summary>
+    /// Creates a new ship systems manager.
+    /// </summary>
+    public ShipSystemsManager() : base()
+    {
+        Instance = this;
+	}
+	#endregion Construction
 
 	#region Properties
 	#region Heat
@@ -94,12 +108,25 @@ public class ShipSystemsManager : MonoBehaviour
     /// Target heading of ship (deg)
     /// </summary>
     public float TargetHeading { get; protected set; }
-    #endregion Telemetry
-    #endregion Properties
+	#endregion Telemetry
+	#endregion Properties
 
-    #region Fields
-    private const float MaximumInteriorTemperature = 40;
-    private List<ShipModule> _shipModules = new List<ShipModule>();
+	#region Constants
+    // Absolute
+    private const float TargetInteriorTemperature = 25; // C
+	private const float AmbientTemperatureRate = 30 / 1000; // C/m
+    private const float Mass = 2000 * 1000; // kg
+    private const float SpecificHeatCapacity = 300; // J/kg-K
+    private const float ThermalConductivity = 2; // W/m-K
+    private const float SurfaceArea = 500; // m^2
+    private const float HullThickness = 1; // m
+    // Derived
+    private const float InternalTemperatureChangeRate = 1000 / (SpecificHeatCapacity * Mass); // C/kWt-s
+    private const float AmbientHeatRate = ThermalConductivity * SurfaceArea / HullThickness / 1000; // kWt/K
+	#endregion Constants
+
+	#region Fields
+	private List<ShipModule> _shipModules = new List<ShipModule>();
     private ReactorModule _reactorModule = null;
     #endregion Fields
 
@@ -145,15 +172,29 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateHeat()
     {
+        // Update ambient values
+        ExternalTemperature = Depth * AmbientTemperatureRate;
+		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * AmbientHeatRate;
 
-    }
+		// Sum heat generation and cooling loads
+		float totalGeneration = 0;
+		float totalCooling = 0;
+
+		foreach (ShipModule module in _shipModules)
+		{
+			totalGeneration += module.HeatGeneration;
+			totalCooling += module.CoolingLoad;
+		}
+
+		TotalSystemsHeat = totalGeneration;
+        TotalCoolingLoad = totalCooling;
+
+        // Determine internal temperature change, if any
+        float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
+		float temperatureDelta = heatFlow * InternalTemperatureChangeRate * Time.fixedDeltaTime;
+		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, TargetInteriorTemperature, float.MaxValue);
+	}
 	#endregion Update Logic
-
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-    {
-        
-    }
 
     void FixedUpdate()
     {

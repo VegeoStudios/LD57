@@ -10,21 +10,43 @@ public class ShipModule : MonoBehaviour
 	[SerializeField]
 	protected string _moduleName = string.Empty;
 	[SerializeField]
-	protected float _startingHeatGeneration = 1;
+	protected float _startingHeatGeneration = 1; // kWt
 	[SerializeField]
-	protected float _startingPowerDemand = 1;
+	protected float _startingPowerDemand = 1; // kWe
 	[SerializeField]
-	protected float _startingPowerProduction = 0;
+	protected float _startingPowerProduction = 0; // kWe
 	[SerializeField]
-	protected float _startingCoolingLoad = 0;
-	[SerializeField]
-	protected List<AppliesModifier> _modifiers = new List<AppliesModifier>();
+	protected float _startingCoolingLoad = 0; // kWt
+
+	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
 	#endregion Fields
 
 	#region Methods
-	protected float GetModifiedValue(ModifiedStat stat, float value)
+	/// <summary>
+	/// Collects <see cref="Modifier"/> information from all slotted <see cref="Item"/>s.
+	/// </summary>
+	protected List<Modifier> GetModuleModifiers(ModifierStatType stat)
 	{
-		foreach (AppliesModifier modifier in _modifiers.Where(m => m.ModifiedStat == stat))
+		List<Modifier> modifiers = new List<Modifier>();
+
+		foreach (ItemSlot slot in ItemSlots)
+		{
+			if (!(slot.SlottedItem is null))
+			{
+				IEnumerable<Modifier> itemModifiers = slot.SlottedItem.Modifiers.Where(m => m.ModifiedStat == stat);
+				if (itemModifiers.Count() > 0)
+				{
+					modifiers.AddRange(itemModifiers);
+				}
+			}
+		}
+
+		return modifiers;
+	}
+
+	protected float GetModifiedValue(ModifierStatType stat, float value)
+	{
+		foreach (Modifier modifier in GetModuleModifiers(stat))
 		{
 			value = modifier.GetModifiedValue(value);
 		}
@@ -41,7 +63,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return GetModifiedValue(ModifiedStat.ModuleHeatProduction, _startingHeatGeneration);
+			return GetModifiedValue(ModifierStatType.ModuleHeatProduction, _startingHeatGeneration);
 		}
 	}
 	/// <summary>
@@ -51,7 +73,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return GetModifiedValue(ModifiedStat.ModulePowerProduction, _startingPowerProduction);
+			return GetModifiedValue(ModifierStatType.ModulePowerProduction, _startingPowerProduction);
 		}
 	}
     /// <summary>
@@ -61,7 +83,7 @@ public class ShipModule : MonoBehaviour
 	{
 		get
 		{
-			return GetModifiedValue(ModifiedStat.ModulePowerDemand, _startingPowerDemand);
+			return GetModifiedValue(ModifierStatType.ModulePowerDemand, _startingPowerDemand);
 		}
 	}
 	/// <summary>
@@ -71,7 +93,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return GetModifiedValue(ModifiedStat.ModuleCoolingLoad, _startingCoolingLoad);
+			return GetModifiedValue(ModifierStatType.ModuleCoolingLoad, _startingCoolingLoad);
 		}
 	}
 	/// <summary>

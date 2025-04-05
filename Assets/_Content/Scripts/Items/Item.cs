@@ -1,33 +1,39 @@
-using System;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+/// <summary>
+/// Describes what kind of item this is.
+/// </summary>
+[Flags]
+public enum ItemType
+{
+	None = 0,
+	Raw = 1,
+	Crafted = 2,
+	Coolant = 4,
+	Fuel = 8,
+	GenericModifier = 16,
+	ReactorModifier = 32,
+	HelmModifier = 64,
+	DrillModifier = 128,
+	CoolingModifier = 256,
+	AnyModifier = GenericModifier | ReactorModifier | HelmModifier | DrillModifier | CoolingModifier,
+}
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
 public abstract class Item : ScriptableObject
 {
-    public string Name;
+	#region Fields
+	public string Name;
     public string Description;
     public int Tier;
     public Sprite Sprite;
 
-    public ItemFlags Flags;
+    public ItemType ItemType;
 
     public float CoolantValue = -1;
     public float FuelValue = -1;
-    public float UpgradeValue = -1;
-
-    [Flags]
-    public enum ItemFlags
-    {
-        None = 1,
-        Raw = 2,
-        Crafted = 4,
-        Coolant = 8,
-        Fuel = 16,
-        GenericUpgrade = 32,
-        ReactorUpgrade = 64,
-        HelmUpgrade = 128,
-        DrillUpgrade = 512,
-        CoolingUpgrade = 1024
-    }
+	public List<Modifier> Modifiers = new List<Modifier>();
+	#endregion Fields
 }

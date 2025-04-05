@@ -4,7 +4,8 @@ using UnityEngine;
 /// <summary>
 /// Defines the type of stat this object applies a modifier to.
 /// </summary>
-public enum ModifiedStat
+[Flags]
+public enum ModifierStatType
 { 
     None = 0,
     ModulePowerDemand = 1,
@@ -19,6 +20,7 @@ public enum ModifiedStat
 /// <summary>
 /// Defines how this mod is applied to a value.
 /// </summary>
+[Flags]
 public enum ModifierType
 { 
     /// <summary>
@@ -36,32 +38,24 @@ public enum ModifierType
     /// <summary>
     /// Value override
     /// </summary>
-    Absolute = 4
+    Absolute = 4,
 }
 
 [Serializable]
-public class AppliesModifier : MonoBehaviour
+public class Modifier : MonoBehaviour
 {
-    /// <summary>
-    /// Determines if this modifier is active or not.
-    /// </summary>
-    public bool Enabled;
-
     /// <summary>
     /// The amount of modifier to apply. For percents, use decimals.
     /// </summary>
     public float Magnitude;
-
     /// <summary>
     /// Which stat is affected by this mod.
     /// </summary>
-    public ModifiedStat ModifiedStat;
-
+    public ModifierStatType ModifiedStat;
     /// <summary>
     /// Type of modifier this is.
     /// </summary>
     public ModifierType ModifierType;
-
     /// <summary>
     /// Applies the stored modifier to the passed value.
     /// </summary>
