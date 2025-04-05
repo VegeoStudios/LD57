@@ -63,6 +63,7 @@ Material:
     - _NoiseMultiplier2: 0
     - _NoiseScale1: 0
     - _NoiseScale2: 0
+    - _PixelScale: 32
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ZWrite: 0
