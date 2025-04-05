@@ -1,4 +1,4 @@
-using NUnit.Framework;
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -99,10 +99,20 @@ public class ShipSystemsManager : MonoBehaviour
 
     #region Fields
     private const float MaximumInteriorTemperature = 40;
+    private List<ShipModule> _shipModules = new List<ShipModule>();
     #endregion Fields
 
     #region Game Object Callbacks
-    
+    /// <summary>
+    /// Registers a new <see cref="ShipModule"/> with this manager.
+    /// </summary>
+    public void Callback(ShipModule module)
+    {
+        if (!_shipModules.Contains(module))
+        {
+			_shipModules.Add(module);
+		}
+	}
 	#endregion Game Object Callbacks
 
 
