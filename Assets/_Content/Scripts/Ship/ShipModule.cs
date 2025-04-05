@@ -16,10 +16,6 @@ public class ShipModule : MonoBehaviour
 	protected float _startingHeatGeneration = 1; // kWt
 	[SerializeField]
 	protected float _startingPowerDemand = 1; // kWe
-	[SerializeField]
-	protected float _startingPowerProduction = 0; // kWe
-	[SerializeField]
-	protected float _startingCoolingLoad = 0; // kWt
 
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
 	#endregion Fields
@@ -69,16 +65,6 @@ public class ShipModule : MonoBehaviour
 			return GetModifiedValue(ModifierStatType.ModuleHeatProduction, _startingHeatGeneration);
 		}
 	}
-	/// <summary>
-	/// Power produced by this module (kWe)
-	/// </summary>
-	public float PowerProduction
-	{ 
-		get
-		{
-			return GetModifiedValue(ModifierStatType.ModulePowerProduction, _startingPowerProduction);
-		}
-	}
     /// <summary>
     /// Power draw of this module (kWe)
     /// </summary>
@@ -87,16 +73,6 @@ public class ShipModule : MonoBehaviour
 		get
 		{
 			return GetModifiedValue(ModifierStatType.ModulePowerDemand, _startingPowerDemand);
-		}
-	}
-	/// <summary>
-	/// Cooling load provided by module (kWt)
-	/// </summary>
-	public float CoolingLoad
-	{ 
-		get
-		{
-			return GetModifiedValue(ModifierStatType.ModuleCoolingLoad, _startingCoolingLoad);
 		}
 	}
 	/// <summary>

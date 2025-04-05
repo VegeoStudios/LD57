@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,32 +9,10 @@ public class ReactorModule : ShipModule
 {
 	#region Fields
 	[SerializeField]
-	protected float _startingReactorFuelConsumption = 1;
+	protected float _startingReactorPower = 24000f; // kWe
 	[SerializeField]
-	protected float _startingReactorFuel = 1;
-	[SerializeField]
-	protected float _startingMaximumFuelItems = 10;
-
-	protected List<GameObject> _fuelItems = new List<GameObject>();
+	protected float _startingReactorFuel = 4000f; // kWh
 	#endregion Fields
-
-	#region Methods
-	/// <summary>
-	/// Consumes a fuel item, if able.
-	/// </summary>
-	public bool AddFuel(GameObject FuelItem)
-	{
-		// Extract the fuel amount from the object and add it to the reactor
-		if (_fuelItems.Count < _startingMaximumFuelItems)
-		{
-			_fuelItems.Add(FuelItem);
-			return true;
-		}
-
-		// if the reactor is full, no more fuel can be added
-		return false;
-	}
-	#endregion Methods
 
 	#region Properties
 	/// <summary>
@@ -52,11 +29,11 @@ public class ReactorModule : ShipModule
 	/// <summary>
 	/// Power produced by this module (kWe)
 	/// </summary>
-	public float FuelConsumption
+	public float PowerProduction
 	{
 		get
 		{
-			return GetModifiedValue(ModifierStatType.ReactorFuelConsumption, _startingReactorFuelConsumption);
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency, _startingReactorPower);
 		}
 	}
 	#endregion Properties
@@ -68,8 +45,15 @@ public class ReactorModule : ShipModule
 	}
 	#endregion Construction
 
-	private void Update()
+	#region Methods
+	public void UpdateFuel()
 	{
-		// Process consuming reactor fuel
+
+	}
+	#endregion Methods
+
+	private void FixedUpdate()
+	{
+		UpdateFuel();
 	}
 }

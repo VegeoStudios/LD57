@@ -10,11 +10,7 @@ public enum ModifierStatType
     None = 0,
     ModulePowerDemand = 1,
     ModuleHeatProduction = 2,
-    ModulePowerProduction = 4,
-	ModuleCoolingLoad = 8,
-    HelmMaximumSpeed = 16,
-    DrillMiningReward = 32,
-	ReactorFuelConsumption = 64,
+    ModuleEfficiency = 4,
 }
 
 /// <summary>

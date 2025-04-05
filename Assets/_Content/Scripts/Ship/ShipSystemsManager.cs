@@ -131,6 +131,7 @@ public class ShipSystemsManager : MonoBehaviour
 	#region Fields
 	private List<ShipModule> _shipModules = new List<ShipModule>();
     private ReactorModule _reactorModule = null;
+    private CoolingModule _coolingModule = null;
     #endregion Fields
 
     #region Game Object Callbacks
@@ -152,46 +153,45 @@ public class ShipSystemsManager : MonoBehaviour
         _reactorModule = module;
         Callback((ShipModule)module);
 	}
+	/// <summary>
+	/// Registers the <see cref="CoolingModule"/> with this manager.
+	/// </summary>
+	public void Callback(CoolingModule module)
+	{
+		_coolingModule = module;
+		Callback((ShipModule)module);
+	}
 	#endregion Game Object Callbacks
 
 	#region Update Logic
 	private void UpdatePower()
     {
-        float totalProduction = 0;
-        float totalDemand = 0;
-
         // Update remaining fuel from ReactorModule
         FuelRemaining = _reactorModule.FuelRemaining;
+		TotalPowerProduction = _reactorModule.PowerProduction;
 
-        foreach (ShipModule module in _shipModules)
+		float totalDemand = 0;
+		foreach (ShipModule module in _shipModules)
         {
-            totalProduction += module.PowerProduction;
             totalDemand += module.PowerDemand;
         }
-
-        TotalPowerProduction = totalProduction;
-        TotalPowerDemand = totalDemand;
+		TotalPowerDemand = totalDemand;
     }
 
     private void UpdateHeat()
     {
-        // Update ambient values
         ExternalTemperature = Depth * AmbientTemperatureRate;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * AmbientHeatRate;
+		TotalCoolingLoad = _coolingModule.CoolingLoad;
 
 		// Sum heat generation and cooling loads
 		float totalGeneration = 0;
-		float totalCooling = 0;
-
 		foreach (ShipModule module in _shipModules)
 		{
 			totalGeneration += module.HeatGeneration;
-			totalCooling += module.CoolingLoad;
 		}
-
 		TotalSystemsHeat = totalGeneration;
-        TotalCoolingLoad = totalCooling;
-
+ 
         // Determine internal temperature change, if any
         float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
 		float temperatureDelta = heatFlow * InternalTemperatureChangeRate * Time.fixedDeltaTime;
