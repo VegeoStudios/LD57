@@ -100,6 +100,7 @@ public class ShipSystemsManager : MonoBehaviour
     #region Fields
     private const float MaximumInteriorTemperature = 40;
     private List<ShipModule> _shipModules = new List<ShipModule>();
+    private ReactorModule _reactorModule = null;
     #endregion Fields
 
     #region Game Object Callbacks
@@ -113,8 +114,40 @@ public class ShipSystemsManager : MonoBehaviour
 			_shipModules.Add(module);
 		}
 	}
+	/// <summary>
+	/// Registers the <see cref="ReactorModule"/> with this manager.
+	/// </summary>
+	public void Callback(ReactorModule module)
+	{
+        _reactorModule = module;
+        Callback((ShipModule)module);
+	}
 	#endregion Game Object Callbacks
 
+	#region Update Logic
+	private void UpdatePower()
+    {
+        float totalProduction = 0;
+        float totalDemand = 0;
+
+        // Update remaining fuel from ReactorModule
+        FuelRemaining = _reactorModule.FuelRemaining;
+
+        foreach (ShipModule module in _shipModules)
+        {
+            totalProduction += module.PowerProduction;
+            totalDemand += module.PowerDemand;
+        }
+
+        TotalPowerProduction = totalProduction;
+        TotalPowerDemand = totalDemand;
+    }
+
+    private void UpdateHeat()
+    {
+
+    }
+	#endregion Update Logic
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -122,9 +155,9 @@ public class ShipSystemsManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        UpdatePower();
+        UpdateHeat();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +39,7 @@ public enum ModifierType
     Absolute = 4
 }
 
+[Serializable]
 public class AppliesModifier : MonoBehaviour
 {
     /// <summary>

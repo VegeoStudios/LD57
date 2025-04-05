@@ -8,21 +8,21 @@ public class ShipModule : MonoBehaviour
 {
 	#region Fields
 	[SerializeField]
-	private string _moduleName = string.Empty;
+	protected string _moduleName = string.Empty;
 	[SerializeField]
-	private float _startingHeatGeneration = 1;
+	protected float _startingHeatGeneration = 1;
 	[SerializeField]
-	private float _startingPowerDemand = 1;
+	protected float _startingPowerDemand = 1;
 	[SerializeField]
-	private float _startingPowerProduction = 0;
+	protected float _startingPowerProduction = 0;
 	[SerializeField]
-	private float _startingCoolingLoad = 0;
+	protected float _startingCoolingLoad = 0;
 	[SerializeField]
-	private List<AppliesModifier> _modifiers = new List<AppliesModifier>();
+	protected List<AppliesModifier> _modifiers = new List<AppliesModifier>();
 	#endregion Fields
 
 	#region Methods
-	private float GetModifiedValue(ModifiedStat stat, float value)
+	protected float GetModifiedValue(ModifiedStat stat, float value)
 	{
 		foreach (AppliesModifier modifier in _modifiers.Where(m => m.ModifiedStat == stat))
 		{
