@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Singleton manager for the ship's systems, update routines, etc.
+/// </summary>
 [Serializable]
 public class ShipSystemsManager : MonoBehaviour
 {
@@ -117,7 +120,7 @@ public class ShipSystemsManager : MonoBehaviour
 	private const float AmbientTemperatureRate = 30 / 1000; // C/m
     private const float Mass = 2000 * 1000; // kg
     private const float SpecificHeatCapacity = 300; // J/kg-K
-    private const float ThermalConductivity = 2; // W/m-K
+    private const float ThermalConductivity = 3.5f; // W/m-K
     private const float SurfaceArea = 500; // m^2
     private const float HullThickness = 1; // m
     // Derived

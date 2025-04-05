@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Reactor module controls the power production on the ship.
+/// </summary>
 [Serializable]
 public class ReactorModule : ShipModule
 {

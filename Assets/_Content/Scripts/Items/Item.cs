@@ -18,22 +18,26 @@ public enum ItemType
 	HelmModifier = 64,
 	DrillModifier = 128,
 	CoolingModifier = 256,
-	AnyModifier = GenericModifier | ReactorModifier | HelmModifier | DrillModifier | CoolingModifier,
 }
 
+/// <summary>
+/// Items are carried by the player and used for crafting.
+/// </summary>
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
+[Serializable]
 public abstract class Item : ScriptableObject
 {
 	#region Fields
+	// UI
 	public string Name;
     public string Description;
     public int Tier;
     public Sprite Sprite;
 
+	// Stats
     public ItemType ItemType;
-
-    public float CoolantValue = -1;
-    public float FuelValue = -1;
+    public float CoolantValue = 0; // kWh
+    public float FuelValue = 0; // kWh
 	public List<Modifier> Modifiers = new List<Modifier>();
 	#endregion Fields
 }

@@ -41,13 +41,17 @@ public enum ModifierType
     Absolute = 4,
 }
 
+/// <summary>
+/// Modifier class to apply changes to ship stats.
+/// </summary>
 [Serializable]
 public class Modifier : MonoBehaviour
 {
-    /// <summary>
-    /// The amount of modifier to apply. For percents, use decimals.
-    /// </summary>
-    public float Magnitude;
+	#region Fields
+	/// <summary>
+	/// The amount of modifier to apply. For percents, use decimals.
+	/// </summary>
+	public float Magnitude;
     /// <summary>
     /// Which stat is affected by this mod.
     /// </summary>
@@ -56,10 +60,13 @@ public class Modifier : MonoBehaviour
     /// Type of modifier this is.
     /// </summary>
     public ModifierType ModifierType;
+    #endregion Fields
+
+    #region Methods
     /// <summary>
     /// Applies the stored modifier to the passed value.
     /// </summary>
-	public float GetModifiedValue(float value)
+    public float GetModifiedValue(float value)
     {
         switch (ModifierType)
         {
@@ -85,4 +92,5 @@ public class Modifier : MonoBehaviour
                 }
 		}
     }
+	#endregion Methods
 }

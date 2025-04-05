@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 /// <summary>
-/// Item slots are members of <see cref="ShipModule"/>s and store <see cref="Item"/> objects.
+/// Item slots are members of <see cref="ShipModule"/>s and store <see cref="Item"/>s.
 /// </summary>
+[Serializable]
 public class ItemSlot : MonoBehaviour
 {
 	#region Properties
@@ -14,10 +16,6 @@ public class ItemSlot : MonoBehaviour
 	/// Describes what items are allowed in this slot.
 	/// </summary>
 	public ItemType AllowedItems { get; protected set; } = ItemType.None;
-	/// <summary>
-	/// The ship module this slot is a member of.
-	/// </summary>
-	public ShipModule ShipModule { get; protected set; } = null;
 	/// <summary>
 	/// Reference to the UI object representing this slot.
 	/// </summary>

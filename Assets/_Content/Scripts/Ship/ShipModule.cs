@@ -3,6 +3,9 @@ using System;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// A ship module is an interactable core system of the ship.
+/// </summary>
 [Serializable]
 public class ShipModule : MonoBehaviour
 {
