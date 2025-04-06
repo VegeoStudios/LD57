@@ -4,19 +4,19 @@ public class Interactable : MonoBehaviour
 {
     public float InteractionDistance = 2f;
 
-    [SerializeField]
-    private GameObject _interactionUI;
+    [SerializeField] private GameObject _interactionUI;
+    [SerializeField] private GameObject _hoverVisual;
+
+    private Material _material;
 
     private void Awake()
     {
-        if (_interactionUI == null)
-        {
-            Debug.LogError("Interaction UI is not assigned in the inspector.");
-        }
-        else
-        {
-            _interactionUI.SetActive(false);
-        }
+        if (_interactionUI) _interactionUI.SetActive(false);
+
+        _material = GetComponent<Renderer>()?.material;
+        if (_material) _material.SetFloat("_OutlineWidth", 0f);
+
+        if (_hoverVisual) _hoverVisual.SetActive(false);
     }
 
     private void OnEnable()
@@ -31,19 +31,20 @@ public class Interactable : MonoBehaviour
 
     public void StartHover()
     {
-
+        if (_material) _material.SetFloat("_OutlineWidth", 1f);
+        if (_hoverVisual) _hoverVisual.SetActive(true);
     }
 
     public void StopHover()
     {
-        if (_interactionUI != null)
-            _interactionUI.SetActive(false);
+        if (_interactionUI) _interactionUI.SetActive(false);
+        if (_material) _material.SetFloat("_OutlineWidth", 0f);
+        if (_hoverVisual) _hoverVisual.SetActive(false);
     }
 
     public virtual void Interact()
     {
-        if (_interactionUI != null)
-            _interactionUI.SetActive(true);
+        if (_interactionUI) _interactionUI.SetActive(!_interactionUI.activeSelf);
     }
 
     private void OnDrawGizmosSelected()
