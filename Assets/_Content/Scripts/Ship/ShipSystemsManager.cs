@@ -59,25 +59,17 @@ public class ShipSystemsManager : MonoBehaviour
     /// Total heat generated from ship systems (kWt)
     /// </summary>
     public float TotalSystemsHeat { get; protected set; }
-	/// <summary>
-	/// Total unspent coolant in cooling module (kWh)
-	/// </summary>
-	public float CoolantRemaining { get; protected set; }
-	/// <summary>
-	/// Total heat leaving the ship via cooling (kWt)
-	/// </summary>
-	public float TotalCoolingLoad { get; protected set; }
-	/// <summary>
-	/// Estimated time until out of coolant (time)
-	/// </summary>
-	public TimeSpan EstimatedCoolingDuration { get; protected set; }
+    /// <summary>
+    /// Total heat leaving the ship via cooling (kWt)
+    /// </summary>
+    public float TotalCoolingLoad { get; protected set; }
 	#endregion Heat
 
 	#region Power
-	/// <summary>
-	/// Total unspent fuel in reactor (kWh)
-	/// </summary>
-	public float FuelRemaining { get; protected set; }
+    /// <summary>
+    /// Total unspent fuel in reactor (MWh)
+    /// </summary>
+    public float FuelRemaining { get; protected set; }
     /// <summary>
     /// Total power drawn from all systems (kWe)
     /// </summary>
@@ -93,7 +85,7 @@ public class ShipSystemsManager : MonoBehaviour
     /// <summary>
     /// Estimated time until out of fuel (time)
     /// </summary>
-    public TimeSpan EstimatedPowerDuration { get; protected set; }
+    public TimeSpan EstimatedRuntime { get; protected set; }
 	#endregion Power
 
 	#region Environment
@@ -101,6 +93,10 @@ public class ShipSystemsManager : MonoBehaviour
     /// Current Fathom zone
     /// </summary>
     public int FathomCount { get; protected set; }
+    /// <summary>
+    /// Name of the current Fathom Region
+    /// </summary>
+    public string FathomRegionName { get; protected set; }
     /// <summary>
     /// Current depth of the ship's nose (m)
     /// </summary>
@@ -137,15 +133,12 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _surfaceArea = 500f; // m^2
     private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
-    private const int _fathomDepth = 2500; // m
     // Derived
     private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
-    private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000f; // kWt/K
+    private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000; // kWt/K
 	#endregion Constants
 
 	#region Fields
-	public List<StorageModule> StorageModules = new List<StorageModule>();
-    // Not shown in inspector
 	private List<ShipModule> _shipModules = new List<ShipModule>();
     private ReactorModule _reactorModule = null;
     private CoolingModule _coolingModule = null;
@@ -178,17 +171,6 @@ public class ShipSystemsManager : MonoBehaviour
 		_coolingModule = module;
 		Callback((ShipModule)module);
 	}
-	/// <summary>
-	/// Registers a new <see cref="StorageModule"/> with this manager.
-	/// </summary>
-	public void Callback(StorageModule module)
-	{
-        if (!StorageModules.Contains(module))
-        {
-			StorageModules.Add(module);
-        }
-		Callback((ShipModule)module);
-	}
 	#endregion Game Object Callbacks
 
 	#region Update Logic
@@ -197,7 +179,7 @@ public class ShipSystemsManager : MonoBehaviour
         _reactorModule.TargetPowerProduction = TotalPowerDemand = _shipModules.Select(mod => mod.PowerDemand).Sum();
 		FuelRemaining = _reactorModule.FuelRemaining;
 		TotalPowerProduction = _reactorModule.PowerProduction;
-		EstimatedPowerDuration = _reactorModule.EstimatedTimeRemaining;
+        EstimatedRuntime = _reactorModule.EstimatedTimeRemaining;
 
         // Check to see if we are over the power limit.
         if (TotalPowerDemand > 0f && TotalPowerProduction < TotalPowerDemand)
@@ -215,7 +197,7 @@ public class ShipSystemsManager : MonoBehaviour
             else
             {
                 // Ship is over-stressed and module efficiency will be reduced.
-                OperationalEfficiency = 2f - utilization;
+                OperationalEfficiency = 2 - utilization;
             }
 
             _shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
@@ -224,12 +206,10 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateHeat()
     {
-		ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
+        ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
-		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
-		_coolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
 		TotalCoolingLoad = _coolingModule.CoolingLoad;
-        EstimatedCoolingDuration = _coolingModule.EstimatedTimeRemaining;
+		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
  
         // Determine internal temperature change, if any
         float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
@@ -237,17 +217,16 @@ public class ShipSystemsManager : MonoBehaviour
 		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
 
-    private void UpdateTelemetry()
+    private void UpdateDepth()
     {
-		Depth = _shipHead.position.x * 0.5f;
-        FathomCount = Mathf.RoundToInt(Depth) / _fathomDepth;
-	}
+        Depth = _shipHead.position.x * 0.286f;
+    }
 	#endregion Update Logic
 
     void FixedUpdate()
     {
         UpdatePower();
-        UpdateTelemetry();
         UpdateHeat();
+        UpdateDepth();
     }
 }
