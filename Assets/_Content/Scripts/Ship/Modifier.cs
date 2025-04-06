@@ -16,7 +16,6 @@ public enum ModifierStatType
 /// <summary>
 /// Defines how this mod is applied to a value.
 /// </summary>
-[Flags]
 public enum ModifierType
 { 
     /// <summary>

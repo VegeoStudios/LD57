@@ -35,14 +35,18 @@ public class ShipSystemsManager : MonoBehaviour
     {
         Instance = this;
 	}
-	#endregion Construction
+    #endregion Construction
 
-	#region Properties
-	#region Heat
-	/// <summary>
-	/// External Temperature (C) - About +30C/1km 
-	/// </summary>
-	public float ExternalTemperature {  get; protected set; }
+    #region References
+    [SerializeField] private Transform _shipHead;
+    #endregion References
+
+    #region Properties
+    #region Heat
+    /// <summary>
+    /// External Temperature (C) - About +30C/1km 
+    /// </summary>
+    public float ExternalTemperature { get; protected set; }
     /// <summary>
     /// Internal Temperature (C)
     /// </summary>
@@ -121,16 +125,16 @@ public class ShipSystemsManager : MonoBehaviour
 
 	#region Constants
     // Absolute
-    private const float _targetInteriorTemperature = 25; // C
-	private const float _ambientTemperatureRate = 30 / 1000; // C/m
-    private const float _mass = 2000 * 1000; // kg
-    private const float _specificHeatCapacity = 300; // J/kg-K
+    private const float _targetInteriorTemperature = 25f; // C
+	private const float _ambientTemperatureRate = 30f / 1000f; // C/m
+    private const float _mass = 2000f * 1000f; // kg
+    private const float _specificHeatCapacity = 300f; // J/kg-K
     private const float _thermalConductivity = 3.5f; // W/m-K
-    private const float _surfaceArea = 500; // m^2
-    private const float _hullThickness = 1; // m
+    private const float _surfaceArea = 500f; // m^2
+    private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
     // Derived
-    private const float _internalTemperatureChangeRate = 1000 / (_specificHeatCapacity * _mass); // C/kWt-s
+    private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
     private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000; // kWt/K
 	#endregion Constants
 
@@ -202,7 +206,7 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateHeat()
     {
-        ExternalTemperature = Depth * _ambientTemperatureRate;
+        ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
 		TotalCoolingLoad = _coolingModule.CoolingLoad;
 		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
@@ -212,11 +216,17 @@ public class ShipSystemsManager : MonoBehaviour
 		float temperatureDelta = heatFlow * _internalTemperatureChangeRate * Time.fixedDeltaTime;
 		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
+
+    private void UpdateDepth()
+    {
+        Depth = _shipHead.position.x * 0.286f;
+    }
 	#endregion Update Logic
 
     void FixedUpdate()
     {
         UpdatePower();
         UpdateHeat();
+        UpdateDepth();
     }
 }

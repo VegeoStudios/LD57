@@ -109,7 +109,7 @@ public class ReactorModule : ShipModule
 	private void UpdateFuel()
 	{
 		// Check if fuel is being loaded
-		if ((_fuelSlot.SlottedItem is null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
+		if ((_fuelSlot.SlottedItem is not null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
 		{
 			_currentFuel += _fuelSlot.SlottedItem.FuelValue;
 			Destroy(_fuelSlot.RemoveSlottedItem().GetComponent<GameObject>());
@@ -122,7 +122,7 @@ public class ReactorModule : ShipModule
 			return;
 		}
 
-		_currentFuel -= fuelConsumed;
+		_currentFuel = Mathf.Max(_currentFuel - fuelConsumed, 0f);
 	}
 
 	private void UpdateTime()

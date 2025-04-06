@@ -25,7 +25,7 @@ public enum ItemType
 /// </summary>
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
 [Serializable]
-public abstract class Item : ScriptableObject
+public class Item : ScriptableObject
 {
 	#region Fields
 	// UI

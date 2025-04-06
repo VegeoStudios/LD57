@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class InteractionSystem : MonoBehaviour
 {
-    public static InteractionSystem Instance { get; private set; }
+    private static InteractionSystem _instance;
+    public static InteractionSystem Instance => _instance ??= FindAnyObjectByType<InteractionSystem>();
 
     public Transform PlayerTransform { get; private set; }
 
@@ -12,16 +13,6 @@ public class InteractionSystem : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         if (PlayerTransform == null)
         {
             PlayerTransform = GetComponentInChildren<PlayerController>().transform;
@@ -45,6 +36,17 @@ public class InteractionSystem : MonoBehaviour
         if (closestInteractable != null)
         {
             float interactionDistance = closestInteractable.InteractionDistance;
+            if (closestInteractable == HoveredInteractable)
+            {
+                if (closestSqrDistance <= interactionDistance * interactionDistance)
+                    return;
+                else
+                {
+                    HoveredInteractable.StopHover();
+                    HoveredInteractable = null;
+                }
+            }
+
             if (closestSqrDistance <= interactionDistance * interactionDistance)
             {
                 HoveredInteractable?.StopHover();
@@ -61,6 +63,14 @@ public class InteractionSystem : MonoBehaviour
         {
             HoveredInteractable?.StopHover();
             HoveredInteractable = null;
+        }
+    }
+
+    public void OnInteract()
+    {
+        if (HoveredInteractable != null)
+        {
+            HoveredInteractable.Interact();
         }
     }
 
