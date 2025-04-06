@@ -28,8 +28,9 @@ public class Item : ScriptableObject
     public string Description;
     public int Tier;
     public Sprite Sprite;
+	public Color Color;
 
-	// Stats
+    // Stats
     public ItemType ItemType;
     public float CoolantValue = 0; // kWh
     public float FuelValue = 0; // kWh

@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Ore
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - ShipInterior
   - ShipExterior
   - Floor
-  - 
+  - Ore
   - 
   - 
   - 
@@ -55,6 +56,9 @@ TagManager:
     locked: 0
   - name: ShipForeground
     uniqueID: 1760806045
+    locked: 0
+  - name: UI
+    uniqueID: 1807720469
     locked: 0
   m_RenderingLayers:
   - Default

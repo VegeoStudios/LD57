@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
+
     public float MovementSpeed = 4f;
     public float Acceleration = 15f;
     public float Deceleration = 20f;
@@ -12,7 +15,9 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D Rigidbody { get; private set; }
     public Vector2 MovementInput {  get; private set; }
     public bool IsMoving => MovementInput != Vector2.zero;
-    public bool CanMove => _playerInput.enabled;
+    public bool CanMove { get; private set; } = true;
+
+    public List<MonoBehaviour> MovementRestrictors = new List<MonoBehaviour>();
 
     private PlayerInput _playerInput;
 
@@ -22,19 +27,47 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         Rigidbody = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
     }
 
+    public void AddMovementRestrictor(MonoBehaviour restrictor)
+    {
+        if (!MovementRestrictors.Contains(restrictor))
+            MovementRestrictors.Add(restrictor);
+        UpdateMovementCondition();
+    }
+
+    public void RemoveMovementRestrictor(MonoBehaviour restrictor)
+    {
+        if (MovementRestrictors.Contains(restrictor))
+            MovementRestrictors.Remove(restrictor);
+        UpdateMovementCondition();
+    }
+
+    private void UpdateMovementCondition()
+    {
+        if (MovementRestrictors.Count > 0)
+        {
+            DisableMovement();
+        }
+        else
+        {
+            EnableMovement();
+        }
+    }
+
     public void DisableMovement()
     {
-        _playerInput.enabled = false;
+        CanMove = false;
         MovementInput = Vector2.zero;
     }
 
     public void EnableMovement()
     {
-        _playerInput.enabled = true;
+        CanMove = true;
     }
 
     private void FixedUpdate()

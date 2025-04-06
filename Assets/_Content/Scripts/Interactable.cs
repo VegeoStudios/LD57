@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
+    public bool Interacting => InteractionUI.activeSelf;
     public float InteractionDistance = 2f;
+    public bool OverridePlayerInput = false;
 
-    [SerializeField] private GameObject _interactionUI;
+    public GameObject InteractionUI;
     [SerializeField] private GameObject _hoverVisual;
 
     private Material _material;
 
     private void Awake()
     {
-        if (_interactionUI) _interactionUI.SetActive(false);
+        if (InteractionUI) InteractionUI.SetActive(false);
 
         _material = GetComponent<Renderer>()?.material;
         if (_material) _material.SetFloat("_OutlineWidth", 0f);
@@ -37,14 +39,33 @@ public class Interactable : MonoBehaviour
 
     public void StopHover()
     {
-        if (_interactionUI) _interactionUI.SetActive(false);
+        if (InteractionUI) InteractionUI.SetActive(false);
         if (_material) _material.SetFloat("_OutlineWidth", 0f);
         if (_hoverVisual) _hoverVisual.SetActive(false);
     }
 
     public virtual void Interact()
     {
-        if (_interactionUI) _interactionUI.SetActive(!_interactionUI.activeSelf);
+        if (InteractionUI.activeSelf)
+        {
+            // Hide interaction UI
+            InteractionUI.SetActive(false);
+
+            if (OverridePlayerInput)
+            {
+                PlayerController.Instance.RemoveMovementRestrictor(this);
+            }
+        }
+        else
+        {
+            // Show interaction UI
+            InteractionUI.SetActive(true);
+
+            if (OverridePlayerInput)
+            {
+                PlayerController.Instance.AddMovementRestrictor(this);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
