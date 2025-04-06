@@ -72,7 +72,7 @@ public class ReactorModule : ShipModule
 	{
 		get
 		{
-			return GetModifiedValue(ModifierStatType.ModuleEfficiency, _startingReactorPower);
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency, CoreFunctionEfficiency * _startingReactorPower);
 		}
 	}
 	#endregion Properties

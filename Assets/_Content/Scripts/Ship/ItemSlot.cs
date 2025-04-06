@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// Item slots are members of <see cref="ShipModule"/>s and store <see cref="Item"/>s.
@@ -9,7 +8,7 @@ using static UnityEditor.Progress;
 [Serializable]
 public class ItemSlot : MonoBehaviour
 {
-	#region Properties
+	#region Fields
 	/// <summary>
 	/// The currently slotted item object, if any.
 	/// </summary>
@@ -17,14 +16,14 @@ public class ItemSlot : MonoBehaviour
 	/// <summary>
 	/// Describes what items are allowed in this slot.
 	/// </summary>
-	public ItemType AllowedItems = ItemType.None;
-	#endregion Properties
+	public ItemType AllowedItems = ItemType.Upgrade;
+	#endregion Fields
 
 	#region References
 	[SerializeField]
-	private SpriteRenderer _spriteRenderer = null;
+	protected SpriteRenderer _spriteRenderer = null;
 	[SerializeField]
-	private Image _image = null;
+	protected Image _image = null;
     #endregion References
 
     #region Events
@@ -38,9 +37,9 @@ public class ItemSlot : MonoBehaviour
     /// <summary>
     /// Determines if the passed item can be received by this slot.
     /// </summary>
-    public bool CanReceiveItem(Item item)
+    public virtual bool CanReceiveItem(Item item)
 	{
-		return item == null || ((AllowedItems & item.ItemType) > 0);
+		return (SlottedItem is null) && ((AllowedItems & item.ItemType) > 0);
 	}
 	/// <summary>
 	/// Removes the slotted item if it exists.
@@ -88,7 +87,10 @@ public class ItemSlot : MonoBehaviour
 		}
 	}
 
-	protected void UpdateSprite()
+	/// <summary>
+	/// Updates the shown sprite
+	/// </summary>
+	public void UpdateSprite()
 	{
         if (_spriteRenderer != null)
         {

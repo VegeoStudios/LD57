@@ -16,12 +16,26 @@ public class FoundryModule : ShipModule
 
 	// Not shown in inspector
 	protected float _currentProcessingTimeElapsed = 0f;
-	protected float _targetProcessingTime = 1f;
-	protected CraftingRecipe _currentCraftingRecipe;
+	protected CraftingRecipe _currentCraftingRecipe = null;
 	#endregion Fields
 
 	#region Properties
-	
+	/// <summary>
+	/// The current time total the crafter is counting up to (s)
+	/// </summary>
+	public float CurrentTargetProcessingTime
+	{
+		get
+		{
+			if (_currentCraftingRecipe is null || !IsActive)
+			{
+				return 0f;
+			}
+
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency,
+				_currentCraftingRecipe.CraftingTime / OperationalEfficiency);
+		}
+	}
 	#endregion Properties
 
 	#region Construction
@@ -35,54 +49,62 @@ public class FoundryModule : ShipModule
 	/// <summary>
 	/// Crafts the passed recipe if able. Assumes crafting is legal.
 	/// </summary>
-	public bool Craft(CraftingRecipe recipe)
+	public void Craft(CraftingRecipe recipe)
 	{
-		// Something is in the way!
-		if (!(_outputSlot.SlottedItem is null))
-		{
-			return false;
-		}
-
-		// Check the warehouse for each crafting component.
+		// Check the storage module for each crafting component.
 		foreach (CraftingComponent component in recipe.Ingredients)
 		{
-			int foundQuantity = 0;
-			ShipSystemsManager.Instance.StorageModules.ForEach(m => foundQuantity += m.Count(component.Item.Name));
-
-			if (foundQuantity < component.Amount)
-			{
-				return false;
-			}
-
-			int consumedQuantity = 0;
-			foreach (StorageModule storage in ShipSystemsManager.Instance.StorageModules)
-			{
-				consumedQuantity += storage.DestroyItems(component.Item.Name, component.Amount - consumedQuantity);
-				if (consumedQuantity >= component.Amount)
-				{
-					// We've done it!
-					break;
-				}
-			}
-
-			// This probably isn't right and we need to instantiate a game object or something
-			_outputSlot.SlottedItem = component.Item;
+			ShipSystemsManager.Instance.StorageModule.StoredItems[component.Item.Name] -= component.Amount;
 		}
 
-		return true;
+		_currentCraftingRecipe = recipe;
 	}
 
 	private void UpdateCraftingProgress()
 	{
-		
+		if (!(_currentCraftingRecipe is null))
+		{
+			if (_currentProcessingTimeElapsed >= CurrentTargetProcessingTime)
+			{
+				if (!(_outputSlot.SlottedItem is null))
+				{
+					// Something is in the way.
+					return;
+				}
+
+				_outputSlot.InsertItem(_currentCraftingRecipe.Result.Item);
+				_currentCraftingRecipe = null;
+				_currentProcessingTimeElapsed = 0f;
+			}
+
+			_currentProcessingTimeElapsed += Time.deltaTime;
+		}
 	}
 
-	protected override void ModuleIdle()
+	private void UpdateCraftableRecipes()
 	{
-		base.ModuleIdle();
-		_currentCraftingRecipe = null;
-		_currentProcessingTimeElapsed = 0f;
-		_targetProcessingTime = 1f;
+		// Slot is full or we're crafting stuff.
+		if (!(_outputSlot.SlottedItem is null) || !(_currentCraftingRecipe is null))
+		{
+			_availableRecipes.ForEach(r => r.CanCraft = false);
+			return;
+		}
+
+		foreach (CraftingRecipe recipe in _availableRecipes)
+		{
+			recipe.CanCraft = true;
+			// Check the storage module for each crafting component.
+			foreach (CraftingComponent component in recipe.Ingredients)
+			{
+				int storedQuantity = ShipSystemsManager.Instance.StorageModule.StoredItems[component.Item.Name];
+				if (storedQuantity < component.Amount)
+				{
+					// We are inextricably poor
+					recipe.CanCraft = false;
+					break;
+				}
+			}
+		}
 	}
 	#endregion Methods
 
@@ -90,6 +112,7 @@ public class FoundryModule : ShipModule
 	{
 		if (IsActive)
 		{
+			UpdateCraftableRecipes();
 			UpdateCraftingProgress();
 		}
 		else

@@ -72,7 +72,7 @@ public class CoolingModule : ShipModule
 	{
 		get
 		{
-			return GetModifiedValue(ModifierStatType.ModuleEfficiency, _startingCoolingLoad);
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency, CoreFunctionEfficiency * _startingCoolingLoad);
 		}
 	}
 	#endregion Properties

@@ -11,6 +11,7 @@ public enum ModifierStatType
     ModulePowerDemand = 1,
     ModuleHeatProduction = 2,
     ModuleEfficiency = 4,
+    CoreFunction = 8
 }
 
 /// <summary>

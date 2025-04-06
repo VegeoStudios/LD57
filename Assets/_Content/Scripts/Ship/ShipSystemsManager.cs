@@ -144,18 +144,19 @@ public class ShipSystemsManager : MonoBehaviour
 	#endregion Constants
 
 	#region Fields
-	public List<StorageModule> StorageModules = new List<StorageModule>();
-    // Not shown in inspector
+	public StorageModule StorageModule = null;
+
+	// Not shown in inspector
 	private List<ShipModule> _shipModules = new List<ShipModule>();
     private ReactorModule _reactorModule = null;
     private CoolingModule _coolingModule = null;
-    #endregion Fields
+	#endregion Fields
 
-    #region Game Object Callbacks
-    /// <summary>
-    /// Registers a new <see cref="ShipModule"/> with this manager.
-    /// </summary>
-    public void Callback(ShipModule module)
+	#region Game Object Callbacks
+	/// <summary>
+	/// Registers a new <see cref="ShipModule"/> with this manager.
+	/// </summary>
+	public void Callback(ShipModule module)
     {
         if (!_shipModules.Contains(module))
         {
@@ -179,14 +180,11 @@ public class ShipSystemsManager : MonoBehaviour
 		Callback((ShipModule)module);
 	}
 	/// <summary>
-	/// Registers a new <see cref="StorageModule"/> with this manager.
+	/// Registers a new <see cref="global::StorageModule"/> with this manager.
 	/// </summary>
 	public void Callback(StorageModule module)
 	{
-        if (!StorageModules.Contains(module))
-        {
-			StorageModules.Add(module);
-        }
+        StorageModule = module;
 		Callback((ShipModule)module);
 	}
 	#endregion Game Object Callbacks

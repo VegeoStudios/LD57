@@ -37,6 +37,10 @@ public class CraftingRecipe : ScriptableObject
 	/// Time required to craft this recipe (s)
 	/// </summary>
     public float CraftingTime = 2f;
+	/// <summary>
+	/// Set by the foundry module if required components exist.
+	/// </summary>
+	public bool CanCraft = false;
 	#endregion Fields
 
 	#region Properties

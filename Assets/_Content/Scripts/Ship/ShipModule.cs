@@ -16,7 +16,10 @@ public class ShipModule : MonoBehaviour
 	protected float _startingHeatGeneration = 1f; // kWt
 	[SerializeField]
 	protected float _startingPowerDemand = 1f; // kWe
+	[SerializeField]
+	protected float _coreFunctionalEfficiency = 1f; // Core function, affected by tier
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
+	public CoreSlot CoreSlot = null;
 	// Not shown in inspector
 	protected bool _isActive = true;
 	#endregion Fields
@@ -28,6 +31,18 @@ public class ShipModule : MonoBehaviour
 	protected List<Modifier> GetModuleModifiers(ModifierStatType stat)
 	{
 		List<Modifier> modifiers = new List<Modifier>();
+
+		if (!ItemSlots.Contains(CoreSlot))
+		{
+			if (!(CoreSlot.SlottedItem is null))
+			{
+				IEnumerable<Modifier> itemModifiers = CoreSlot.SlottedItem.Modifiers.Where(m => m.ModifiedStat == stat);
+				if (itemModifiers.Count() > 0)
+				{
+					modifiers.AddRange(itemModifiers);
+				}
+			}
+		}
 
 		foreach (ItemSlot slot in ItemSlots)
 		{
@@ -62,6 +77,16 @@ public class ShipModule : MonoBehaviour
 
 	#region Properties
 	/// <summary>
+	/// The current tier of this module.
+	/// </summary>
+	public int Tier
+	{
+		get
+		{
+			return CoreSlot.SlottedItem?.Tier ?? 0;
+		}
+	}
+	/// <summary>
 	/// Determines if this module is active or not.
 	/// </summary>
 	public bool IsActive
@@ -76,9 +101,20 @@ public class ShipModule : MonoBehaviour
 		}
 	}
 	/// <summary>
-	/// The relative efficiency of this module (%)
+	/// The relative efficiency of this module depending on power grid status (%)
 	/// </summary>
 	public float OperationalEfficiency;
+	/// <summary>
+	/// Core stat modifier depending on module tier and slotted upgrades (%)
+	/// </summary>
+	/// <remarks>Not affected by enabled-ness.</remarks>
+	public float CoreFunctionEfficiency
+	{
+		get
+		{
+			return GetModifiedValue(ModifierStatType.CoreFunction, _coreFunctionalEfficiency);
+		}
+	}
 	/// <summary>
 	/// Heat output of this module (kWt)
 	/// </summary>

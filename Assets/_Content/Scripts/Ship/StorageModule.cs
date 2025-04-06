@@ -1,18 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
+/// <summary>
+/// Module storing all of the ship's items.
+/// </summary>
+[Serializable]
 public class StorageModule : ShipModule
 {
-	#region Properties
-	public List<Item> StoredItems = new List<Item>();
-	#endregion Properties
-
 	#region Fields
-	protected int _storageCapacity = 100;
+	public Dictionary<string, int> StoredItems = new Dictionary<string, int>();
+	public List<Item> ItemPrefabs = new List<Item>();
+	[SerializeField]
+	protected ItemSlot _storageSlot = null;
+	[SerializeField]
+	protected int _startingStorageCapacity = 50;
+	// Tracks if the current slotted item was retrieved from storage
+	private bool _itemRetrieved = false;
+	/// <summary>
+	/// True if the storage slot is empty
+	/// </summary>
+	public bool CanRetrieveItem = true;
 	#endregion Fields
 
-	#region Methods
+	#region Properties
 	/// <summary>
 	/// The maximum number of items this storage module can hold.
 	/// </summary>
@@ -20,61 +32,58 @@ public class StorageModule : ShipModule
 	{
 		get
 		{
-			return _storageCapacity;
+			return (int)GetModifiedValue(ModifierStatType.ModuleEfficiency, CoreFunctionEfficiency * _startingStorageCapacity);
 		}
 	}
 	/// <summary>
-	/// Attempts to store the passed item.
+	/// How full the storage currently is.
 	/// </summary>
-	/// <returns>Returns true if successful.</returns>
-	public bool StoreItem(Item item)
+	public int StorageFillPercent
 	{
-		if (StoredItems.Count == _storageCapacity)
+		get
 		{
-			return false;
+			return 100 * StoredItems.Values.Sum() / StorageCapacity;
 		}
-
-		StoredItems.Add(item);
-		return true;
 	}
-	/// <summary>
-	/// Remove an item from storage and give it to the player.
-	/// </summary>
-	public Item RetrieveItem(string itemName)
-	{
-		IEnumerable<Item> storedItemsWithThisName = StoredItems.Where(i => i.Name == itemName);
+	#endregion Properties
 
-		if (!storedItemsWithThisName.Any())
+	#region Methods
+	/// <summary>
+	/// Extracts an item from storage and places it in the storage slot if able.
+	/// </summary>
+	public bool RetrieveItem(string itemName)
+	{
+		bool result = false;
+		if (CanRetrieveItem)
 		{
-			return null;
+			Item item = ItemPrefabs.First(i => i.Name == itemName);
+			result = _storageSlot.InsertItem(item);
 		}
 
-		Item itemToRetrieve = storedItemsWithThisName.LastOrDefault();
-		StoredItems.Remove(itemToRetrieve);
-		return itemToRetrieve;
+		UpdateStorageSlot();
+		return result;
 	}
-	/// <summary>
-	/// Returns the amount of an item in this module.
-	/// </summary>
-	public int Count(string itemName)
-	{
-		return StoredItems.Where(i => i.Name == itemName).Count();
-	}
-	/// <summary>
-	/// Destroys item objects as requested, usually for crafting.
-	/// </summary>
-	/// <returns>Number of items destroyed.</returns>
-	public int DestroyItems(string itemName, int count)
-	{
-		List<Item> storedItemsWithThisName = StoredItems.Where(i => i.Name == itemName).ToList();
-		int itemsToDelete = Math.Min(storedItemsWithThisName.Count, count);
 
-		foreach (Item item in storedItemsWithThisName)
+	private void UpdateStorageSlot()
+	{
+		CanRetrieveItem = _storageSlot.SlottedItem is null;
+
+		if (_itemRetrieved)
 		{
-			StoredItems.Remove(item);
+			// Something is waiting to be collected
+			_itemRetrieved = !CanRetrieveItem;
 		}
-
-		return itemsToDelete;
+		else if (!CanRetrieveItem && StoredItems.Count < StorageCapacity)
+		{
+			StoredItems[_storageSlot.SlottedItem.Name] += 1;
+			_storageSlot.SlottedItem = null;
+		}
 	}
 	#endregion Methods
+
+	void FixedUpdate()
+	{
+		UpdateStorageSlot();
+		ModuleIdle();
+	}
 }

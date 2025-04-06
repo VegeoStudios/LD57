@@ -8,16 +8,11 @@ using UnityEngine;
 [Flags]
 public enum ItemType
 {
-	None = 0,
-	Raw = 1,
-	Crafted = 2,
-	Coolant = 4,
-	Fuel = 8,
-	GenericModifier = 16,
-	ReactorModifier = 32,
-	HelmModifier = 64,
-	DrillModifier = 128,
-	CoolingModifier = 256,
+	Raw = 0,
+	Coolant = 1,
+	Fuel = 2,
+	Upgrade = 4,
+	TierCore = 8,
 }
 
 /// <summary>
