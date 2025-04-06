@@ -109,7 +109,7 @@ public class CoolingModule : ShipModule
 	private void UpdateCoolant()
 	{
 		// Check if coolant is being loaded
-		if ((_coolantSlot.SlottedItem is not null) && _coolantSlot.SlottedItem.ItemType == ItemType.Coolant)
+		if (!(_coolantSlot.SlottedItem is null) && _coolantSlot.SlottedItem.ItemType == ItemType.Coolant)
 		{
 			_currentCoolant += _coolantSlot.SlottedItem.CoolantValue;
 			Destroy(_coolantSlot.RemoveSlottedItem().GetComponent<GameObject>());
