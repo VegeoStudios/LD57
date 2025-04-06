@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public float Acceleration = 15f;
     public float Deceleration = 20f;
 
+    [SerializeField] private LayerMask _groundLayer;
+
     public Rigidbody2D Rigidbody { get; private set; }
     public Vector2 MovementInput {  get; private set; }
     public bool IsMoving => MovementInput != Vector2.zero;
@@ -31,11 +33,25 @@ public class PlayerController : MonoBehaviour
         _playerInput.enabled = true;
     }
 
+    private void Update()
+    {
+        // parent transform to the ground
+        if (Physics2D.Raycast(transform.position, Vector2.zero, 0f, _groundLayer))
+        {
+            transform.parent = Physics2D.Raycast(transform.position, Vector2.down, 1f, _groundLayer).collider.transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
+        transform.localRotation = Quaternion.identity; // reset rotation to avoid unwanted rotation when parented to the ground
+    }
+
     private void FixedUpdate()
     {
         if (IsMoving)
         {
-            Vector2 targetVelocity = MovementInput * MovementSpeed;
+            Vector2 targetVelocity = transform.TransformDirection(MovementInput) * MovementSpeed;
             Vector2 velocity = Rigidbody.linearVelocity;
             float acceleration = velocity.magnitude > 0 ? Acceleration : Deceleration;
             Rigidbody.linearVelocity = Vector2.MoveTowards(velocity, targetVelocity, acceleration * Time.fixedDeltaTime);

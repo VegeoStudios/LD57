@@ -13,9 +13,9 @@ TagManager:
   - UI
   - WorldResource
   - Player
-  - Ship
-  - 
-  - 
+  - ShipInterior
+  - ShipExterior
+  - Floor
   - 
   - 
   - 
