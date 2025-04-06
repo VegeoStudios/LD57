@@ -96,18 +96,15 @@ public class ShipSystemsManager : MonoBehaviour
     public TimeSpan EstimatedPowerDuration { get; protected set; }
 	#endregion Power
 
-	#region Environment
-    /// <summary>
-    /// Current Fathom zone
-    /// </summary>
-    public int FathomCount { get; protected set; }
+	#region Telemetry
+	/// <summary>
+	/// Current Fathom zone
+	/// </summary>
+	public int FathomCount { get; protected set; }
     /// <summary>
     /// Current depth of the ship's nose (m)
     /// </summary>
     public float Depth { get; protected set; }
-	#endregion Environment
-
-	#region Telemetry
     /// <summary>
     /// Current maximum allowed speed of ship (m/s)
     /// </summary>
@@ -117,9 +114,13 @@ public class ShipSystemsManager : MonoBehaviour
     /// </summary>
     public float CurrentSpeed { get; protected set; }
     /// <summary>
-    /// Directional heading of ship (deg)
+    /// Throttle-set speed target (m/s)
     /// </summary>
-    public float CurrentHeading { get; protected set; }
+	public float TargetSpeed { get; protected set; }
+	/// <summary>
+	/// Directional heading of ship (deg)
+	/// </summary>
+	public float CurrentHeading { get; protected set; }
     /// <summary>
     /// Target heading of ship (deg)
     /// </summary>
@@ -137,7 +138,7 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _surfaceArea = 500f; // m^2
     private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
-    private const int _fathomDepth = 2500; // m
+    private const int _fathomDepth = 3000; // m
     // Derived
     private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
     private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000f; // kWt/K
@@ -150,6 +151,7 @@ public class ShipSystemsManager : MonoBehaviour
 	private List<ShipModule> _shipModules = new List<ShipModule>();
     private ReactorModule _reactorModule = null;
     private CoolingModule _coolingModule = null;
+    private EngineModule _engineModule = null;
 	#endregion Fields
 
 	#region Game Object Callbacks
@@ -179,12 +181,20 @@ public class ShipSystemsManager : MonoBehaviour
 		_coolingModule = module;
 		Callback((ShipModule)module);
 	}
-	/// <summary>
-	/// Registers a new <see cref="global::StorageModule"/> with this manager.
-	/// </summary>
-	public void Callback(StorageModule module)
+    /// <summary>
+    /// Registers the <see cref="global::StorageModule"/> with this manager.
+    /// </summary>
+    public void Callback(StorageModule module)
 	{
         StorageModule = module;
+		Callback((ShipModule)module);
+	}
+	/// <summary>
+	/// Registers the <see cref="EngineModule"/> with this manager.
+	/// </summary>
+	public void Callback(EngineModule module)
+	{
+		_engineModule = module;
 		Callback((ShipModule)module);
 	}
 	#endregion Game Object Callbacks
@@ -237,8 +247,28 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateTelemetry()
     {
-		Depth = _shipHead.position.x * 0.5f;
-        FathomCount = Mathf.RoundToInt(Depth) / _fathomDepth;
+        float relativeDepth = _shipHead.position.x * 0.286f;
+		Depth = relativeDepth + FathomCount * _fathomDepth;
+        CurrentSpeed = _engineModule.CurrentSpeed;
+        CurrentHeading = _engineModule.CurrentHeading;
+        MaximumSpeed = _engineModule.MaximumSpeed;
+        TargetSpeed = _engineModule.TargetSpeed;
+        TargetHeading = _engineModule.TargetHeading;
+
+        if (relativeDepth >= _fathomDepth)
+        {
+            NextFathom();
+        }
+	}
+
+    /// <summary>
+    /// Called when the next fathom is reached. Position resets/etc. happen now.
+    /// </summary>
+    private void NextFathom()
+    {
+        FathomCount++;
+
+		// TODO
 	}
 	#endregion Update Logic
 
