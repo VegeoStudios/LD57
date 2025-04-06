@@ -17,7 +17,7 @@ public class ReactorModule : ShipModule
 	protected ItemSlot _fuelSlot = null;
 
 	// Not shown in inspector
-	protected const float _tolerance = 0.1f; // kWe
+	protected const float _tolerance = 0.001f; // kWe
 	protected float _currentFuel; // kWh
 	protected float _currentPowerProduction; //kWe
 	protected float _currentTargetPower; // kWe
@@ -109,13 +109,13 @@ public class ReactorModule : ShipModule
 	private void UpdateFuel()
 	{
 		// Check if fuel is being loaded
-		if ((_fuelSlot.SlottedItem is not null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
+		if (!(_fuelSlot.SlottedItem is null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
 		{
 			_currentFuel += _fuelSlot.SlottedItem.FuelValue;
 			Destroy(_fuelSlot.RemoveSlottedItem().GetComponent<GameObject>());
 		}
 
-		float fuelConsumed = Time.fixedDeltaTime * _currentPowerProduction * OperationalEfficiency;
+		float fuelConsumed = Time.fixedDeltaTime * _currentPowerProduction * OperationalEfficiency / 3600f;
 
 		if (!IsActive || fuelConsumed <= _tolerance)
 		{
@@ -134,7 +134,7 @@ public class ReactorModule : ShipModule
 			return;
 		}
 
-		_timeRemaining = new TimeSpan(0, 0, (int)(3600 * _currentFuel / _currentPowerProduction));
+		_timeRemaining = new TimeSpan(0, 0, (int)(3600f * _currentFuel / _currentPowerProduction));
 	}
 
 	protected override void ModuleIdle()
@@ -145,7 +145,7 @@ public class ReactorModule : ShipModule
 	}
 	#endregion Methods
 
-	private void FixedUpdate()
+	void FixedUpdate()
 	{
 		if (IsActive)
 		{

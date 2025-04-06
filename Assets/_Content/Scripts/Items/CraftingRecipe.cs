@@ -34,7 +34,7 @@ public class CraftingRecipe : ScriptableObject
     public List<CraftingComponent> Ingredients = new List<CraftingComponent>();
 
 	/// <summary>
-	/// Time required to craft this recipe.
+	/// Time required to craft this recipe (s)
 	/// </summary>
     public float CraftingTime = 2f;
 	#endregion Fields
