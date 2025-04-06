@@ -17,7 +17,7 @@ public class CoolingModule : ShipModule
 	protected ItemSlot _coolantSlot = null;
 
 	// Not shown in inspector
-	protected const float _tolerance = 0.1f; // kWe
+	protected const float _tolerance = 0.001f; // kWe
 	protected float _currentCoolant; // kWh
 	protected float _currentCoolingLoad; //kWe
 	protected float _currentTargetCooling; // kWe
@@ -96,7 +96,7 @@ public class CoolingModule : ShipModule
 		}
 		else if (!IsActive || _currentTargetCooling <= _tolerance || _currentCoolant < _tolerance)
 		{
-			// The mnodule is off. 
+			// The module is off. 
 			_currentCoolingLoad = 0f;
 		}
 		else
@@ -111,18 +111,18 @@ public class CoolingModule : ShipModule
 		// Check if coolant is being loaded
 		if ((_coolantSlot.SlottedItem is not null) && _coolantSlot.SlottedItem.ItemType == ItemType.Coolant)
 		{
-			_currentCoolant += _coolantSlot.SlottedItem.FuelValue;
+			_currentCoolant += _coolantSlot.SlottedItem.CoolantValue;
 			Destroy(_coolantSlot.RemoveSlottedItem().GetComponent<GameObject>());
 		}
 
-		float coolantConsumed = Time.fixedDeltaTime * _currentCoolingLoad * OperationalEfficiency;
+		float coolantConsumed = Time.fixedDeltaTime * _currentCoolingLoad * OperationalEfficiency / 3600f;
 
 		if (!IsActive || coolantConsumed <= _tolerance)
 		{
 			return;
 		}
 
-		_currentCoolant -= coolantConsumed;
+		_currentCoolant = Mathf.Max(_currentCoolant - coolantConsumed, 0f);
 	}
 
 	private void UpdateTime()
@@ -134,7 +134,7 @@ public class CoolingModule : ShipModule
 			return;
 		}
 
-		_timeRemaining = new TimeSpan(0, 0, (int)(3600 * _currentCoolant / _currentCoolingLoad));
+		_timeRemaining = new TimeSpan(0, 0, (int)(3600f * _currentCoolant / _currentCoolingLoad));
 	}
 
 	protected override void ModuleIdle()

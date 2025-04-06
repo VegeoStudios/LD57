@@ -13,9 +13,9 @@ public class ShipModule : MonoBehaviour
 	[SerializeField]
 	protected string _moduleName = string.Empty;
 	[SerializeField]
-	protected float _startingHeatGeneration = 1; // kWt
+	protected float _startingHeatGeneration = 1f; // kWt
 	[SerializeField]
-	protected float _startingPowerDemand = 1; // kWe
+	protected float _startingPowerDemand = 1f; // kWe
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
 	// Not shown in inspector
 	protected bool _isActive = true;
@@ -68,7 +68,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return _isActive && OperationalEfficiency > 0.1f;
+			return _isActive && OperationalEfficiency > 0.001f;
 		}
 		set
 		{

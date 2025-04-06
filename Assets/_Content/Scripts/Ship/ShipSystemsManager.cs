@@ -135,7 +135,7 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _blackoutThreshold = 1.25f; // %
     // Derived
     private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
-    private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000; // kWt/K
+    private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000f; // kWt/K
 	#endregion Constants
 
 	#region Fields
@@ -197,7 +197,7 @@ public class ShipSystemsManager : MonoBehaviour
             else
             {
                 // Ship is over-stressed and module efficiency will be reduced.
-                OperationalEfficiency = 2 - utilization;
+                OperationalEfficiency = 2f - utilization;
             }
 
             _shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
@@ -206,27 +206,23 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateHeat()
     {
-        ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
+		Depth = _shipHead.position.x * 0.286f;
+		ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
-		TotalCoolingLoad = _coolingModule.CoolingLoad;
 		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
+		_coolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
+		TotalCoolingLoad = _coolingModule.CoolingLoad;
  
         // Determine internal temperature change, if any
         float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
 		float temperatureDelta = heatFlow * _internalTemperatureChangeRate * Time.fixedDeltaTime;
 		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
-
-    private void UpdateDepth()
-    {
-        Depth = _shipHead.position.x * 0.286f;
-    }
 	#endregion Update Logic
 
     void FixedUpdate()
     {
         UpdatePower();
         UpdateHeat();
-        UpdateDepth();
     }
 }
