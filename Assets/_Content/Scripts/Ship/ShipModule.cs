@@ -16,8 +16,9 @@ public class ShipModule : MonoBehaviour
 	protected float _startingHeatGeneration = 1; // kWt
 	[SerializeField]
 	protected float _startingPowerDemand = 1; // kWe
-
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
+	// Not shown in inspector
+	protected bool _isActive = true;
 	#endregion Fields
 
 	#region Methods
@@ -52,9 +53,32 @@ public class ShipModule : MonoBehaviour
 
 		return value;
 	}
+
+	protected virtual void ModuleIdle()
+	{
+		OperationalEfficiency = 1f;
+	}
 	#endregion Methods
 
 	#region Properties
+	/// <summary>
+	/// Determines if this module is active or not.
+	/// </summary>
+	public bool IsActive
+	{ 
+		get
+		{
+			return _isActive && OperationalEfficiency > 0.1f;
+		}
+		set
+		{
+			_isActive = value;
+		}
+	}
+	/// <summary>
+	/// The relative efficiency of this module (%)
+	/// </summary>
+	public float OperationalEfficiency;
 	/// <summary>
 	/// Heat output of this module (kWt)
 	/// </summary>
@@ -62,7 +86,8 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return GetModifiedValue(ModifierStatType.ModuleHeatProduction, _startingHeatGeneration);
+			return IsActive ? GetModifiedValue(ModifierStatType.ModuleHeatProduction, _startingHeatGeneration) :
+				0f;
 		}
 	}
     /// <summary>
@@ -72,7 +97,8 @@ public class ShipModule : MonoBehaviour
 	{
 		get
 		{
-			return GetModifiedValue(ModifierStatType.ModulePowerDemand, _startingPowerDemand);
+			return IsActive ? GetModifiedValue(ModifierStatType.ModulePowerDemand, _startingPowerDemand) :
+				0f;
 		}
 	}
 	/// <summary>

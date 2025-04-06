@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Singleton manager for the ship's systems, update routines, etc.
@@ -74,6 +75,10 @@ public class ShipSystemsManager : MonoBehaviour
     /// </summary>
     public float TotalPowerProduction { get; protected set; }
     /// <summary>
+    /// Total efficiency of all ship systems (%)
+    /// </summary>
+    public float OperationalEfficiency { get; protected set; }
+    /// <summary>
     /// Estimated time until out of fuel (time)
     /// </summary>
     public TimeSpan EstimatedRuntime { get; protected set; }
@@ -116,16 +121,17 @@ public class ShipSystemsManager : MonoBehaviour
 
 	#region Constants
     // Absolute
-    private const float TargetInteriorTemperature = 25; // C
-	private const float AmbientTemperatureRate = 30 / 1000; // C/m
-    private const float Mass = 2000 * 1000; // kg
-    private const float SpecificHeatCapacity = 300; // J/kg-K
-    private const float ThermalConductivity = 3.5f; // W/m-K
-    private const float SurfaceArea = 500; // m^2
-    private const float HullThickness = 1; // m
+    private const float _targetInteriorTemperature = 25; // C
+	private const float _ambientTemperatureRate = 30 / 1000; // C/m
+    private const float _mass = 2000 * 1000; // kg
+    private const float _specificHeatCapacity = 300; // J/kg-K
+    private const float _thermalConductivity = 3.5f; // W/m-K
+    private const float _surfaceArea = 500; // m^2
+    private const float _hullThickness = 1; // m
+    private const float _blackoutThreshold = 1.25f; // %
     // Derived
-    private const float InternalTemperatureChangeRate = 1000 / (SpecificHeatCapacity * Mass); // C/kWt-s
-    private const float AmbientHeatRate = ThermalConductivity * SurfaceArea / HullThickness / 1000; // kWt/K
+    private const float _internalTemperatureChangeRate = 1000 / (_specificHeatCapacity * _mass); // C/kWt-s
+    private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000; // kWt/K
 	#endregion Constants
 
 	#region Fields
@@ -166,36 +172,45 @@ public class ShipSystemsManager : MonoBehaviour
 	#region Update Logic
 	private void UpdatePower()
     {
-        // Update remaining fuel from ReactorModule
-        FuelRemaining = _reactorModule.FuelRemaining;
+        _reactorModule.TargetPowerProduction = TotalPowerDemand = _shipModules.Select(mod => mod.PowerDemand).Sum();
+		FuelRemaining = _reactorModule.FuelRemaining;
 		TotalPowerProduction = _reactorModule.PowerProduction;
+        EstimatedRuntime = _reactorModule.EstimatedTimeRemaining;
 
-		float totalDemand = 0;
-		foreach (ShipModule module in _shipModules)
+        // Check to see if we are over the power limit.
+        if (TotalPowerDemand > 0f && TotalPowerProduction < TotalPowerDemand)
         {
-            totalDemand += module.PowerDemand;
+            float utilization = TotalPowerProduction / TotalPowerDemand;
+            if (utilization < 1f)
+            {
+                OperationalEfficiency = 1f;
+            }
+            else if (utilization > _blackoutThreshold)
+            {
+                // Ship is going into blackout!
+                OperationalEfficiency = 0f;
+			}
+            else
+            {
+                // Ship is over-stressed and module efficiency will be reduced.
+                OperationalEfficiency = 2 - utilization;
+            }
+
+            _shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
         }
-		TotalPowerDemand = totalDemand;
     }
 
     private void UpdateHeat()
     {
-        ExternalTemperature = Depth * AmbientTemperatureRate;
-		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * AmbientHeatRate;
+        ExternalTemperature = Depth * _ambientTemperatureRate;
+		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
 		TotalCoolingLoad = _coolingModule.CoolingLoad;
-
-		// Sum heat generation and cooling loads
-		float totalGeneration = 0;
-		foreach (ShipModule module in _shipModules)
-		{
-			totalGeneration += module.HeatGeneration;
-		}
-		TotalSystemsHeat = totalGeneration;
+		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
  
         // Determine internal temperature change, if any
         float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
-		float temperatureDelta = heatFlow * InternalTemperatureChangeRate * Time.fixedDeltaTime;
-		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, TargetInteriorTemperature, float.MaxValue);
+		float temperatureDelta = heatFlow * _internalTemperatureChangeRate * Time.fixedDeltaTime;
+		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
 	#endregion Update Logic
 
