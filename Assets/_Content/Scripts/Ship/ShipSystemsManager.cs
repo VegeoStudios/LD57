@@ -80,13 +80,45 @@ public class ShipSystemsManager : MonoBehaviour
     /// Estimated time until out of fuel (time)
     /// </summary>
     public TimeSpan EstimatedPowerDuration { get; protected set; }
-	#endregion Power
+    #endregion Power
 
-	#region Telemetry
-	/// <summary>
-	/// Current Fathom zone
-	/// </summary>
-	public int FathomCount { get; protected set; }
+    #region Telemetry
+    /// <summary>
+    /// Current Fathom zone
+    /// </summary>
+    public int FathomCount { get; protected set; } = 0;
+    /// <summary>
+    /// The current tier of the game, determined by fathom count.
+    /// </summary>
+    public int CurrentTier { get; protected set; } = 1;
+    /// <summary>
+    /// Display name of the current tier.
+    /// </summary>
+    public string CurrentTierName 
+    { 
+        get
+        {
+            switch (CurrentTier)
+            {
+				case 1:
+					{
+						return "Crust Strata";
+					}
+				case 2:
+					{
+						return "Lithosphere";
+					}
+                case 3:
+                    {
+                        return "Asthenosphere";
+					}
+                default:
+					{
+						return "Mantle";
+					}
+			}
+        }
+    }
     /// <summary>
     /// Current depth of the ship's nose (m)
     /// </summary>
@@ -125,6 +157,7 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
     private const int _fathomDepth = 3000; // m
+    private const int _fathomsPerTier = 3;
     // Derived
     private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
     private const float _ambientHeatRate = _thermalConductivity * _surfaceArea / _hullThickness / 1000f; // kWt/K
@@ -233,7 +266,7 @@ public class ShipSystemsManager : MonoBehaviour
 
     private void UpdateTelemetry()
     {
-        float relativeDepth = _shipHead.position.x * 0.286f;
+        float relativeDepth = _shipHead.position.x * 0.5f;
 		Depth = relativeDepth + FathomCount * _fathomDepth;
         CurrentSpeed = _engineModule.CurrentSpeed;
         CurrentHeading = _engineModule.CurrentHeading;
@@ -241,7 +274,7 @@ public class ShipSystemsManager : MonoBehaviour
         TargetSpeed = _engineModule.TargetSpeed;
         TargetHeading = _engineModule.TargetHeading;
 
-        if (relativeDepth >= _fathomDepth)
+		if (relativeDepth >= _fathomDepth)
         {
             NextFathom();
         }
@@ -252,7 +285,8 @@ public class ShipSystemsManager : MonoBehaviour
     /// </summary>
     private void NextFathom()
     {
-        FathomCount++;
+		CurrentTier = 1 + FathomCount / _fathomsPerTier;
+		FathomCount++;
 
 		// TODO
 	}
