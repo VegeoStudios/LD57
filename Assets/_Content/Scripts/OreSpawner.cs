@@ -4,7 +4,7 @@ public class OreSpawner : MonoBehaviour
 {
     public static OreSpawner Instance;
 
-    public OreTableEntry[] OreTable;
+    public OreTable[] Stages;
 
     public float SpawnRate = 1f;
 
@@ -12,6 +12,8 @@ public class OreSpawner : MonoBehaviour
 
     private float _lastXPos;
     private BoxCollider2D _collider;
+
+    private int _currentStageIndex = 0;
 
     private void Awake()
     {
@@ -37,10 +39,18 @@ public class OreSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_currentStageIndex < Stages.Length - 1 &&
+            transform.position.x > Stages[_currentStageIndex + 1].Depth)
+        {
+            _currentStageIndex++;
+        }
+
+        if (_currentStageIndex < 0) return; // Don't spawn ores on surface
+
         float diff = transform.position.x - _lastXPos;
 
         float rand = Random.value;
-        float threshold = Mathf.Clamp01(SpawnRate * diff);
+        float threshold = Mathf.Clamp01(Stages[_currentStageIndex].SpawnRate * diff);
 
         //Debug.Log($"Random: {rand}, Threshold: {threshold}, Diff: {diff}");
 
@@ -62,12 +72,12 @@ public class OreSpawner : MonoBehaviour
 
         Item item = null;
         float totalWeight = 0f;
-        foreach (OreTableEntry entry in OreTable)
+        foreach (OreTableEntry entry in Stages[_currentStageIndex].Entries)
         {
             totalWeight += entry.Weight;
         }
         float randomValue = Random.Range(0f, totalWeight);
-        foreach (OreTableEntry entry in OreTable)
+        foreach (OreTableEntry entry in Stages[_currentStageIndex].Entries)
         {
             if (randomValue < entry.Weight)
             {
@@ -94,5 +104,13 @@ public class OreSpawner : MonoBehaviour
     {
         public Item Item;
         public float Weight;
+    }
+
+    [System.Serializable]
+    public struct OreTable
+    {
+        public int Depth;
+        public float SpawnRate;
+        public OreTableEntry[] Entries;
     }
 }

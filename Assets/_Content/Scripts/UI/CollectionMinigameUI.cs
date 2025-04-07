@@ -29,7 +29,7 @@ public class CollectionMinigameUI : MonoBehaviour
         float graphWidth = _graph.rectTransform.rect.width;
         float graphHeight = _graph.rectTransform.rect.height;
         _angleCursor.anchoredPosition = new Vector2(Mathf.InverseLerp(_collectorDrillModule.MaxAngle, _collectorDrillModule.MinAngle, _collectorDrillModule.DrillAngle) * graphWidth, 0);
-        _depthCursor.anchoredPosition = new Vector2(0, -Mathf.InverseLerp(_collectorDrillModule.CollectionRange, 0f, _collectorDrillModule.DrillDepth) * graphHeight);
+        _depthCursor.anchoredPosition = new Vector2(0.032f, -Mathf.InverseLerp(_collectorDrillModule.CollectionRange, 0f, _collectorDrillModule.DrillDepth) * graphHeight);
         _countText.text = _collectorDrillModule.Drill.childCount.ToString();
     }
 }

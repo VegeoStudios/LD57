@@ -72,10 +72,6 @@ public class EngineModule : ShipModule
 	{
 		Locomotion.TargetSpeed = TargetSpeed = MaximumSpeed * Throttle.value;
 		Locomotion.TargetRotation = TargetHeading = Heading.value;
-
-		CurrentSpeed = (ShipHead.transform.position - _previousPosition).magnitude / Time.fixedDeltaTime;
-		CurrentHeading = ShipHead.transform.eulerAngles.z;
-		_previousPosition = ShipHead.transform.position;
 	}
 
 	protected override void ModuleIdle()
@@ -98,7 +94,11 @@ public class EngineModule : ShipModule
 		{
 			ModuleIdle();
 		}
-	}
+
+        CurrentSpeed = (ShipHead.transform.position - _previousPosition).magnitude / Time.fixedDeltaTime;
+        CurrentHeading = ShipHead.transform.eulerAngles.z;
+        _previousPosition = ShipHead.transform.position;
+    }
 
 	void Start()
 	{

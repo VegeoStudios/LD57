@@ -167,10 +167,10 @@ public class ShipSystemsManager : MonoBehaviour
 	public StorageModule StorageModule = null;
 
 	// Not shown in inspector
-	private List<ShipModule> _shipModules = new List<ShipModule>();
-    private ReactorModule _reactorModule = null;
-    private CoolingModule _coolingModule = null;
-    private EngineModule _engineModule = null;
+	public List<ShipModule> ShipModules { get; private set; } = new List<ShipModule>();
+    public ReactorModule ReactorModule { get; private set; } = null;
+    public CoolingModule CoolingModule { get; private set; } = null;
+    public EngineModule EngineModule { get; private set; } = null;
 	#endregion Fields
 
 	#region Game Object Callbacks
@@ -179,25 +179,25 @@ public class ShipSystemsManager : MonoBehaviour
 	/// </summary>
 	public void Callback(ShipModule module)
     {
-        if (!_shipModules.Contains(module))
+        if (!ShipModules.Contains(module))
         {
-			_shipModules.Add(module);
+			ShipModules.Add(module);
 		}
 	}
-	/// <summary>
-	/// Registers the <see cref="ReactorModule"/> with this manager.
-	/// </summary>
-	public void Callback(ReactorModule module)
+    /// <summary>
+    /// Registers the <see cref="global::ReactorModule"/> with this manager.
+    /// </summary>
+    public void Callback(ReactorModule module)
 	{
-        _reactorModule = module;
+        ReactorModule = module;
         Callback((ShipModule)module);
 	}
-	/// <summary>
-	/// Registers the <see cref="CoolingModule"/> with this manager.
-	/// </summary>
-	public void Callback(CoolingModule module)
+    /// <summary>
+    /// Registers the <see cref="global::CoolingModule"/> with this manager.
+    /// </summary>
+    public void Callback(CoolingModule module)
 	{
-		_coolingModule = module;
+		CoolingModule = module;
 		Callback((ShipModule)module);
 	}
     /// <summary>
@@ -208,12 +208,12 @@ public class ShipSystemsManager : MonoBehaviour
         StorageModule = module;
 		Callback((ShipModule)module);
 	}
-	/// <summary>
-	/// Registers the <see cref="EngineModule"/> with this manager.
-	/// </summary>
-	public void Callback(EngineModule module)
+    /// <summary>
+    /// Registers the <see cref="global::EngineModule"/> with this manager.
+    /// </summary>
+    public void Callback(EngineModule module)
 	{
-		_engineModule = module;
+		EngineModule = module;
 		Callback((ShipModule)module);
 	}
 	#endregion Game Object Callbacks
@@ -221,19 +221,19 @@ public class ShipSystemsManager : MonoBehaviour
 	#region Update Logic
 	private void UpdatePower()
     {
-        _reactorModule.TargetPowerProduction = TotalPowerDemand = _shipModules.Select(mod => mod.PowerDemand).Sum();
-		FuelRemaining = _reactorModule.FuelRemaining;
-		TotalPowerProduction = _reactorModule.PowerProduction;
-		EstimatedPowerDuration = _reactorModule.EstimatedTimeRemaining;
+        ReactorModule.TargetPowerProduction = TotalPowerDemand = ShipModules.Select(mod => mod.PowerDemand).Sum();
+		FuelRemaining = ReactorModule.FuelRemaining;
+		TotalPowerProduction = ReactorModule.PowerProduction;
+		EstimatedPowerDuration = ReactorModule.EstimatedTimeRemaining;
 		OperationalEfficiency = 1f;
 
 		if (TotalPowerDemand > 0.1f)
 		{
-            float utilization = TotalPowerDemand / _reactorModule.MaximumPowerProduction;
+            float utilization = TotalPowerDemand / ReactorModule.MaximumPowerProduction;
             if (utilization > _blackoutThreshold)
             {
 				// Ship is going into blackout!
-				foreach (ShipModule module in _shipModules.Where(m => m != _reactorModule))
+				foreach (ShipModule module in ShipModules.Where(m => m != ReactorModule))
 				{
 					module.IsActive = false;
 				}
@@ -245,18 +245,18 @@ public class ShipSystemsManager : MonoBehaviour
             }
         }
 
-		_shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
+		ShipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
 	}
 
     private void UpdateHeat()
     {
 		ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
-		TotalSystemsHeat = _shipModules.Select(mod => mod.HeatGeneration).Sum();
-		_coolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
-		TotalCoolingLoad = _coolingModule.CoolingLoad;
-        EstimatedCoolingDuration = _coolingModule.EstimatedTimeRemaining;
-		CoolantRemaining = _coolingModule.CoolantRemaining;
+		TotalSystemsHeat = ShipModules.Select(mod => mod.HeatGeneration).Sum();
+		CoolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
+		TotalCoolingLoad = CoolingModule.CoolingLoad;
+        EstimatedCoolingDuration = CoolingModule.EstimatedTimeRemaining;
+		CoolantRemaining = CoolingModule.CoolantRemaining;
 
 		// Determine internal temperature change, if any
 		float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
@@ -268,11 +268,11 @@ public class ShipSystemsManager : MonoBehaviour
     {
         float relativeDepth = _shipHead.position.x * 0.5f;
 		Depth = relativeDepth + FathomCount * _fathomDepth;
-        CurrentSpeed = _engineModule.CurrentSpeed;
-        CurrentHeading = _engineModule.CurrentHeading;
-        MaximumSpeed = _engineModule.MaximumSpeed;
-        TargetSpeed = _engineModule.TargetSpeed;
-        TargetHeading = _engineModule.TargetHeading;
+        CurrentSpeed = EngineModule.CurrentSpeed;
+        CurrentHeading = EngineModule.CurrentHeading;
+        MaximumSpeed = EngineModule.MaximumSpeed;
+        TargetSpeed = EngineModule.TargetSpeed;
+        TargetHeading = EngineModule.TargetHeading;
 
 		if (relativeDepth >= _fathomDepth)
         {

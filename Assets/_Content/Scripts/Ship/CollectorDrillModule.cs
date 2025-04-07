@@ -83,12 +83,21 @@ public class CollectorDrillModule : ShipModule
 
 	private void Update()
     {
-        if (!IsActive) return;
-        if (_interactable.Interacting)
+        if (_interactable.Interacting && IsActive)
         {
             ControlProcess();
             ScanningProcess();
         }
+        else
+        {
+            DrillDepth -= Time.deltaTime * DrillSpeed * OperationalEfficiency;
+        }
+
+        DrillDepth = Mathf.Clamp(DrillDepth, 0.5f, CollectionRange);
+        DrillAngle = Mathf.Clamp(DrillAngle, MinAngle, MaxAngle);
+
+        Drill.localPosition = new Vector3(0f, DrillDepth, 0f);
+        CollectionOrigin.localRotation = Quaternion.Euler(0f, 0f, DrillAngle);
     }
 
     private void ControlProcess()
@@ -113,26 +122,23 @@ public class CollectorDrillModule : ShipModule
                 DrillAngle -= Time.deltaTime * RotationSpeed;
             }
         }
-
-        DrillDepth = Mathf.Clamp(DrillDepth, 0.5f, CollectionRange);
-        DrillAngle = Mathf.Clamp(DrillAngle, MinAngle, MaxAngle);
-
-        Drill.localPosition = new Vector3(0f, DrillDepth, 0f);
-        CollectionOrigin.localRotation = Quaternion.Euler(0f, 0f, DrillAngle);
     }
 
     private void ScanningProcess()
     {
-        _targetScanProgress += ScanTime * Time.deltaTime;
+        _targetScanProgress += Time.deltaTime / ScanTime;
 
         
         while (_currentScanProgress < _targetScanProgress && _currentScanIndex < ScanTextureWidth)
         {
-            float value = ScanRay(MinAngle + _currentScanIndex * (MaxAngle - MinAngle) / ScanTextureWidth) * ScanValueMultiplier + Random.value * ScanNoise;
+            Unity.Mathematics.float4 noise = new Unity.Mathematics.float4(Random.value, Random.value, Random.value, Random.value);
+            noise *= noise * ScanNoise;
+            Unity.Mathematics.float4 value = ScanRay(MinAngle + _currentScanIndex * (MaxAngle - MinAngle) / ScanTextureWidth) * ScanValueMultiplier + noise;
 
             for (int y = 0; y < ScanTextureHeight; y++)
             {
-                ScanTexture.SetPixel(ScanTextureWidth - _currentScanIndex, y, y < value ? Color.white : Color.black);
+                Color color = new Color(y < value.x ? 1f : 0f, y < value.y ? 1f : 0f, y < value.z ? 1f : 0f);
+                ScanTexture.SetPixel(ScanTextureWidth - _currentScanIndex, y, y < value.w ? Color.white : color);
             }
 
             ScanTexture.Apply();
@@ -160,9 +166,9 @@ public class CollectorDrillModule : ShipModule
         Gizmos.DrawLine(transform.position, transform.position + direction * CollectionRange);
     }
 
-    private float ScanRay(float angle)
+    private Unity.Mathematics.float4 ScanRay(float angle)
     {
-        float output = 0f;
+        Unity.Mathematics.float4 output = default;
 
         Vector3 direction = Quaternion.Euler(0, 0, angle) * transform.up;
         int hits = Physics2D.RaycastNonAlloc(CollectionOrigin.position, direction, _hitBuffer, CollectionRange, _detectionLayerMask);
@@ -172,7 +178,21 @@ public class CollectorDrillModule : ShipModule
             Ore ore = _hitBuffer[i].collider.GetComponent<Ore>();
             if (ore != null)
             {
-                output += -_hitBuffer[i].normal.y;
+                switch (ore.Item.OreType)
+                {
+                    case OreType.Metallic:
+                        output.x += Mathf.Abs(_hitBuffer[i].normal.y);
+                        break;
+                    case OreType.Crystal:
+                        output.y += Mathf.Abs(_hitBuffer[i].normal.y);
+                        break;
+                    case OreType.Liquid:
+                        output.z += Mathf.Abs(_hitBuffer[i].normal.y);
+                        break;
+                    default:
+                        output.w += Mathf.Abs(_hitBuffer[i].normal.y);
+                        break;
+                }
             }
         }
 

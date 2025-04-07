@@ -15,6 +15,8 @@ public class CollectionTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!_collectorDrillModule.IsActive) return;
+
         if (other.CompareTag("Ore"))
         {
             Ore ore = other.GetComponent<Ore>();
