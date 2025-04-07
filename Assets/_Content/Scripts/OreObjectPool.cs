@@ -31,7 +31,7 @@ public class OreObjectPool : ObjectPool<Ore>
 
         obj.Value = value;
         obj.Item = item;
-        int tierIndex = Mathf.Clamp(Mathf.FloorToInt(Mathf.Lerp(0, OreSprites.Length, value / 8)), 0, OreSprites.Length - 1);
+        int tierIndex = Mathf.Clamp(Mathf.FloorToInt(Mathf.Lerp(0, OreSprites.Length, value / 6)), 0, OreSprites.Length - 1);
         obj.GetComponent<SpriteRenderer>().sprite = OreSprites[tierIndex];
         obj.GetComponent<CircleCollider2D>().radius = ColliderRadii[tierIndex];
         obj.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;

@@ -24,9 +24,9 @@ public class ShipModule : MonoBehaviour
 	public Button PowerToggleButton = null;
 	public TextMeshProUGUI PowerButtonText = null;
 
-	// Not shown in inspector
-	protected bool _isActive = true;
-	protected bool _isActiveUIState = true;
+    // Not shown in inspector
+    [SerializeField] protected bool _isActive = true;
+    protected bool _isActiveUIState = true;
 	#endregion Fields
 
 	#region Methods
