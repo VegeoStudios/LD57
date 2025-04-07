@@ -2,20 +2,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RecipeItemEntry : MonoBehaviour
+public class IngredientEntry : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _itemNameText = null;
     [SerializeField] private Image _itemIcon = null;
     [SerializeField] private TextMeshProUGUI _itemCountText = null;
 
-    private RecipeUI _recipeUI = null;
+    private CraftingUI _craftingUI = null;
     public Item Item;
     public string Name;
     public string Count;
 
-    public void Initialize(RecipeUI recipeUI)
+    public void Initialize(CraftingUI craftingUI)
     {
-        _recipeUI = recipeUI;
+        _craftingUI = craftingUI;
     }
 
     public void UpdateUI(Item item, int count = 0)
@@ -28,7 +28,7 @@ public class RecipeItemEntry : MonoBehaviour
 
         Item = item;
         Name = item.Name;
-        Count = count + "/" + ShipSystemsManager.Instance.StorageModule.StoredItems[item.Name];
+        Count = ShipSystemsManager.Instance.StorageModule.StoredItems[item.Name] + "/" + count;
         _itemNameText.text = item.Name;
         _itemIcon.sprite = item.Sprite;
         _itemCountText.text = Count;

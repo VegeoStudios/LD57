@@ -16,13 +16,14 @@ public class FoundryModule : ShipModule
 	// Not shown in inspector
 	protected float _currentProcessingTimeElapsed = 0f;
 	protected CraftingRecipe _currentCraftingRecipe = null;
-	#endregion Fields
 
-	#region Properties
-	/// <summary>
-	/// The current time total the crafter is counting up to (s)
-	/// </summary>
-	public float CurrentTargetProcessingTime
+    #endregion Fields
+
+    #region Properties
+    /// <summary>
+    /// The current time total the crafter is counting up to (s)
+    /// </summary>
+    public float CurrentTargetProcessingTime
 	{
 		get
 		{
@@ -67,11 +68,16 @@ public class FoundryModule : ShipModule
 				}
 
 				_outputSlot.SlottedItem = _currentCraftingRecipe.Result.Item;
+				_outputSlot.UpdateSprite();
 				_currentCraftingRecipe = null;
 				_currentProcessingTimeElapsed = 0f;
-			}
 
-			_currentProcessingTimeElapsed += Time.deltaTime;
+				UpdateCraftableRecipes();
+
+				ShipSystemsManager.Instance.StorageModule.StoredItemsUIDirty = true;
+            }
+
+			_currentProcessingTimeElapsed += Time.fixedDeltaTime;
 		}
 	}
 
@@ -117,7 +123,7 @@ public class FoundryModule : ShipModule
 		}
 	}
 
-	void Start()
+    void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
 	}

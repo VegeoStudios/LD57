@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingEntry : MonoBehaviour
+public class RecipeEntry : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _itemNameText = null;
     [SerializeField] private Image _itemIcon = null;
@@ -23,6 +23,6 @@ public class CraftingEntry : MonoBehaviour
 
     public void Select()
     {
-        _craftingUI?.SelectRecipe(Recipe);
+        _craftingUI?.SelectRecipe(this);
     }
 }
