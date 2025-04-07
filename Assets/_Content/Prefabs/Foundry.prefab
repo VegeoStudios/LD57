@@ -534,7 +534,29 @@ MonoBehaviour:
   PowerButtonText: {fileID: 6263346061893438598}
   OperationalEfficiency: 1
   _outputSlot: {fileID: 5664906416470180617}
-  _availableRecipes: []
+  _availableRecipes:
+  - {fileID: 11400000, guid: ccc70a7d13dbbb64cac8a300189ee3ec, type: 2}
+  - {fileID: 11400000, guid: 50cb7bfa0087e494ba0dda75b8350ca1, type: 2}
+  - {fileID: 11400000, guid: edede32ea03deed4d88ddfdb17059010, type: 2}
+  - {fileID: 11400000, guid: 757a1d7fc221151408adfbef636562cb, type: 2}
+  - {fileID: 11400000, guid: 17498721582800f46ab70a871616845f, type: 2}
+  - {fileID: 11400000, guid: ad87bfd3caa9fdb439a4a3b178f8f696, type: 2}
+  - {fileID: 11400000, guid: d06687e9b4ae5464a96dd205da56d78c, type: 2}
+  - {fileID: 11400000, guid: f16e99e656b16d64e8a181ee8ce35ea9, type: 2}
+  - {fileID: 11400000, guid: 3bc4a777b7ca3944995bb6fae483bcec, type: 2}
+  - {fileID: 11400000, guid: 328e189d61b944f498720fa91dd5d6a2, type: 2}
+  - {fileID: 11400000, guid: b43b80707a82a724e94d4068df8ff84b, type: 2}
+  - {fileID: 11400000, guid: 76d1aa4682d0ad44387952f705469335, type: 2}
+  - {fileID: 11400000, guid: 37e5e159d56a3a04bac436f7d05e5e8a, type: 2}
+  - {fileID: 11400000, guid: f54460bd3e0fb3045a932c6b47007add, type: 2}
+  - {fileID: 11400000, guid: 0728930f829f5bb49b6d63deadc878ba, type: 2}
+  - {fileID: 11400000, guid: c4f23f2fe0b02ad44b51f18f1c719443, type: 2}
+  - {fileID: 11400000, guid: 1d5857b024b6ed94587b609c0cff6b21, type: 2}
+  - {fileID: 11400000, guid: 8664b8cd88c0d444d803f4c0cd01411f, type: 2}
+  - {fileID: 11400000, guid: 0865b010068c0584c972aad7127e055a, type: 2}
+  - {fileID: 11400000, guid: 1e72f10aaae5c974fada122e2770d880, type: 2}
+  - {fileID: 11400000, guid: 230f844e38b6e934791cc238d008952d, type: 2}
+  - {fileID: 11400000, guid: ea21f6046a062094a9860f4ed75b6fa2, type: 2}
 --- !u!1 &2541400168521779218
 GameObject:
   m_ObjectHideFlags: 0

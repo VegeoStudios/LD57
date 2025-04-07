@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb508fdb47974d1498bd0229a41a4062, type: 3}
+  m_Name: T4 Core
+  m_EditorClassIdentifier: 
+  Result:
+    Item: {fileID: 11400000, guid: 177a471ec6a373f459bf4b1e67a3ba39, type: 2}
+    Amount: 1
+  Ingredients:
+  - Item: {fileID: 11400000, guid: 1ec6c6ed52c8095438f7503a10e6f87b, type: 2}
+    Amount: 10
+  - Item: {fileID: 11400000, guid: a63d76b70ecae27439fa10b0e7247624, type: 2}
+    Amount: 10
+  - Item: {fileID: 11400000, guid: dee64de7f6f213a44947b6cadcd851d4, type: 2}
+    Amount: 10
+  - Item: {fileID: 11400000, guid: 4786564f207881a49ac37a2b5d3f89c7, type: 2}
+    Amount: 5
+  - Item: {fileID: 11400000, guid: e447dfc61c283b44b8edc84b34f3dcb5, type: 2}
+    Amount: 5
+  CraftingTime: 20
+  CanCraft: 0

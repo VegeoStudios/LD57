@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb508fdb47974d1498bd0229a41a4062, type: 3}
+  m_Name: T1 Nav Beacon
+  m_EditorClassIdentifier: 
+  Result:
+    Item: {fileID: 11400000, guid: 59833c7bf349bc548988401bb735efed, type: 2}
+    Amount: 1
+  Ingredients:
+  - Item: {fileID: 11400000, guid: 1ec6c6ed52c8095438f7503a10e6f87b, type: 2}
+    Amount: 10
+  - Item: {fileID: 11400000, guid: a63d76b70ecae27439fa10b0e7247624, type: 2}
+    Amount: 10
+  CraftingTime: 30
+  CanCraft: 0
