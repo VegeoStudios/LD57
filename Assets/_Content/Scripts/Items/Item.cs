@@ -17,6 +17,17 @@ public enum ItemType
 }
 
 /// <summary>
+/// Describes what kind of ore this is, if applicable.
+/// </summary>
+public enum OreType
+{ 
+	None = 0,
+	Crystal = 1,
+	Metallic = 2,
+	Liquid = 4,
+}
+
+/// <summary>
 /// Items are carried by the player and used for crafting.
 /// </summary>
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
@@ -31,8 +42,9 @@ public class Item : ScriptableObject
     public Sprite Sprite;
 	public Color Color;
 
-    // Stats
-    public ItemType ItemType;
+	// Stats
+	public OreType OreType = OreType.None;
+	public ItemType ItemType;
     public float CoolantValue = 0; // kWh
     public float FuelValue = 0; // kWh
 	public List<Modifier> Modifiers = new List<Modifier>();

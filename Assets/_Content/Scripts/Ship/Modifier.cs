@@ -41,8 +41,9 @@ public enum ModifierType
 /// <summary>
 /// Modifier class to apply changes to ship stats.
 /// </summary>
+[CreateAssetMenu(fileName = "New Modifier", menuName = "Items/Modifier")]
 [Serializable]
-public class Modifier : MonoBehaviour
+public class Modifier : ScriptableObject
 {
 	#region Fields
 	/// <summary>

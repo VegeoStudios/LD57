@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0245a3168b49ff84c9322c7e1a45fc76, type: 3}
+  m_Name: Coolant Helium LG
+  m_EditorClassIdentifier: 
+  Name: Large Helium Tank
+  Description: Coolant refill
+  Tier: 4
+  Sprite: {fileID: 21300000, guid: 42abf0e209f31e2459ca9852a692e001, type: 3}
+  Color: {r: 0, g: 0, b: 0, a: 0}
+  OreType: 0
+  ItemType: 1
+  CoolantValue: 2000
+  FuelValue: 0
+  Modifiers: []
