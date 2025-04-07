@@ -1989,7 +1989,7 @@ GameObject:
   - component: {fileID: 3753369785569280349}
   - component: {fileID: 8420437193146672900}
   m_Layer: 0
-  m_Name: Engine_0
+  m_Name: Engine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
