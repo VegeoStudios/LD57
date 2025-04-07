@@ -13,19 +13,6 @@ public class ShipLocomotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            TargetRotation = 20;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            TargetRotation = -20;
-        }
-        else
-        {
-            TargetRotation = 0;
-        }
-
         UpdateSpeed(Time.fixedDeltaTime);
         DoMovement(Time.fixedDeltaTime);
     }
@@ -37,8 +24,6 @@ public class ShipLocomotion : MonoBehaviour
 
     private void DoMovement(float dt)
     {
-        Vector3 lastPosition = Head.position;
-
         // Head movement
         Head.MoveRotation(Quaternion.RotateTowards(Head.transform.rotation, Quaternion.Euler(0, 0, TargetRotation), _speed * dt));
         Head.MovePosition(Head.transform.position + Head.transform.right * _speed * dt);

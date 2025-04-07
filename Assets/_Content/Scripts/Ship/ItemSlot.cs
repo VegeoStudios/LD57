@@ -45,7 +45,7 @@ public class ItemSlot : MonoBehaviour
 	{
 		get
 		{
-			return (AllowedItems & ItemType.TierCore) > 0;
+			return AllowedItems.HasFlag(ItemType.TierCore);
 		}
 	}
 	#endregion Properties
@@ -78,7 +78,7 @@ public class ItemSlot : MonoBehaviour
 	/// </summary>
 	public virtual bool CanReceiveItem(Item item)
 	{
-		return ((AllowedItems & item.ItemType) > 0) &&
+		return AllowedItems.HasFlag(item.ItemType) &&
 			(SlottedItem == null || (IsCoreSlot && item.Tier > SlottedItem.Tier));
 	}
     /// <summary>

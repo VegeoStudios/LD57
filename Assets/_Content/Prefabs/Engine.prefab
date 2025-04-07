@@ -339,6 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlottedItem: {fileID: 0}
   AllowedItems: 4
+  IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
   _image: {fileID: 6346937982919177700}
 --- !u!114 &1539859979274746089
@@ -450,6 +451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlottedItem: {fileID: 0}
   AllowedItems: 8
+  IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
   _image: {fileID: 7335564446339472899}
 --- !u!114 &6907409683338750923
@@ -1569,6 +1571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlottedItem: {fileID: 0}
   AllowedItems: 4
+  IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
   _image: {fileID: 7522892665096200159}
 --- !u!114 &4139360268104211824
@@ -2376,7 +2379,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6797532356098309417}
   m_FillRect: {fileID: 1790167615477049078}
   m_HandleRect: {fileID: 8479047648176995988}
-  m_Direction: 0
+  m_Direction: 1
   m_MinValue: -20
   m_MaxValue: 20
   m_WholeNumbers: 1
@@ -2548,6 +2551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlottedItem: {fileID: 0}
   AllowedItems: 4
+  IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
   _image: {fileID: 7854640701321595720}
 --- !u!114 &904998906670485425

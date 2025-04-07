@@ -8,6 +8,7 @@ using UnityEngine;
 [Flags]
 public enum ItemType
 {
+	None = 0,
 	Coolant = 1,
 	Fuel = 2,
 	Upgrade = 4,

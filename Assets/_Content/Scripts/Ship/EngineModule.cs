@@ -75,6 +75,7 @@ public class EngineModule : ShipModule
 
 		CurrentSpeed = (ShipHead.transform.position - _previousPosition).magnitude / Time.fixedDeltaTime;
 		CurrentHeading = ShipHead.transform.eulerAngles.z;
+		_previousPosition = ShipHead.transform.position;
 	}
 	#endregion Methods
 

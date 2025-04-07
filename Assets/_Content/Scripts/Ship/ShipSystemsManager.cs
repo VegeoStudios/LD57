@@ -224,9 +224,10 @@ public class ShipSystemsManager : MonoBehaviour
 		_coolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
 		TotalCoolingLoad = _coolingModule.CoolingLoad;
         EstimatedCoolingDuration = _coolingModule.EstimatedTimeRemaining;
- 
-        // Determine internal temperature change, if any
-        float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
+		CoolantRemaining = _coolingModule.CoolantRemaining;
+
+		// Determine internal temperature change, if any
+		float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
 		float temperatureDelta = heatFlow * _internalTemperatureChangeRate * Time.fixedDeltaTime;
 		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
