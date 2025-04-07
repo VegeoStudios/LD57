@@ -77,6 +77,13 @@ public class EngineModule : ShipModule
 		CurrentHeading = ShipHead.transform.eulerAngles.z;
 		_previousPosition = ShipHead.transform.position;
 	}
+
+	protected override void ModuleIdle()
+	{
+		Locomotion.TargetSpeed = 0f;
+		Locomotion.TargetRotation = CurrentHeading;
+		base.ModuleIdle();
+	}
 	#endregion Methods
 
 	#region Events
