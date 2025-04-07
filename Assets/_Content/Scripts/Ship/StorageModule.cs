@@ -11,6 +11,7 @@ public class StorageModule : ShipModule
 {
 	#region Fields
 	public Dictionary<string, int> StoredItems = new Dictionary<string, int>();
+	public bool StoredItemsUIDirty = true;
 	public List<Item> ItemPrefabs = new List<Item>();
 	[SerializeField]
 	protected ItemSlot _storageSlot = null;
@@ -51,38 +52,75 @@ public class StorageModule : ShipModule
 	/// <summary>
 	/// Extracts an item from storage and places it in the storage slot if able.
 	/// </summary>
-	public bool RetrieveItem(string itemName)
+	public void RetrieveItem(string itemName)
 	{
-		bool result = false;
 		if (CanRetrieveItem)
 		{
 			Item item = ItemPrefabs.First(i => i.Name == itemName);
-			result = _storageSlot.SlottedItem = item;
-		}
+            if (StoredItems.ContainsKey(itemName) && StoredItems[itemName] > 0)
+            {
+                StoredItems[itemName] -= 1;
+                StoredItemsUIDirty = true;
+            }
+            _storageSlot.SlottedItem = item;
+			_itemRetrieved = true;
+        }
 
-		UpdateStorageSlot();
-		return result;
+		UpdateStorageSlot(true);
 	}
 
-	private void UpdateStorageSlot()
+	private void UpdateStorageSlot(bool verbose = false)
 	{
 		CanRetrieveItem = _storageSlot.SlottedItem == null;
 
-		if (_itemRetrieved)
+		if (verbose) Debug.Log("CanRetrieveItem: " + CanRetrieveItem);
+		if (verbose) Debug.Log("_itemRetrieved: " + _itemRetrieved);
+
+        if (_itemRetrieved)
 		{
 			// Something is waiting to be collected
 			_itemRetrieved = !CanRetrieveItem;
 		}
 		else if (!CanRetrieveItem && StoredItems.Count < StorageCapacity)
 		{
-			StoredItems[_storageSlot.SlottedItem.Name] += 1;
-			_storageSlot.SlottedItem = null;
+			Debug.Log("Adding item to storage: " + _storageSlot.SlottedItem.Name);
+            StoredItems[_storageSlot.SlottedItem.Name] += 1;
+            StoredItemsUIDirty = true;
+            _storageSlot.SlottedItem = null;
 		}
 	}
-	#endregion Methods
 
-	#region Events
-	void Start()
+	public int AddItem(string itemName, int amount)
+    {
+        amount = Mathf.Min(amount, StorageCapacity - GetCurrentCapacity());
+        if (StoredItems.ContainsKey(itemName))
+        {
+            StoredItems[itemName] += amount;
+        }
+        else
+        {
+            StoredItems.Add(itemName, amount);
+        }
+        if (amount > 0)
+        {
+            StoredItemsUIDirty = true;
+        }
+        return amount;
+    }
+
+	public int GetCurrentCapacity()
+	{
+        int currentCapacity = 0;
+        foreach (KeyValuePair<string, int> item in StoredItems)
+        {
+            currentCapacity += item.Value;
+        }
+        return currentCapacity;
+    }
+    #endregion Methods
+
+    #region Events
+    void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
 		foreach (Item item in ItemPrefabs)

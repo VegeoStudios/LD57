@@ -165,9 +165,10 @@ public class ShipSystemsManager : MonoBehaviour
 
 	#region Fields
 	public StorageModule StorageModule = null;
+    public FoundryModule FoundryModule = null;
 
-	// Not shown in inspector
-	public List<ShipModule> ShipModules { get; private set; } = new List<ShipModule>();
+    // Not shown in inspector
+    public List<ShipModule> ShipModules { get; private set; } = new List<ShipModule>();
     public ReactorModule ReactorModule { get; private set; } = null;
     public CoolingModule CoolingModule { get; private set; } = null;
     public EngineModule EngineModule { get; private set; } = null;

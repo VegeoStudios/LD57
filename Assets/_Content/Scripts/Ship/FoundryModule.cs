@@ -8,11 +8,10 @@ using System.Collections.Generic;
 [Serializable]
 public class FoundryModule : ShipModule
 {
-	#region Fields
-	[SerializeField]
+    #region Fields
+    public List<CraftingRecipe> AvailableRecipes = new List<CraftingRecipe>();
+    [SerializeField]
 	protected ItemSlot _outputSlot = null;
-	[SerializeField]
-	protected List<CraftingRecipe> _availableRecipes = new List<CraftingRecipe>();
 
 	// Not shown in inspector
 	protected float _currentProcessingTimeElapsed = 0f;
@@ -50,7 +49,9 @@ public class FoundryModule : ShipModule
 			ShipSystemsManager.Instance.StorageModule.StoredItems[component.Item.Name] -= component.Amount;
 		}
 
-		_currentCraftingRecipe = recipe;
+		ShipSystemsManager.Instance.StorageModule.StoredItemsUIDirty = true;
+
+        _currentCraftingRecipe = recipe;
 	}
 
 	private void UpdateCraftingProgress()
@@ -79,11 +80,11 @@ public class FoundryModule : ShipModule
 		// Slot is full or we're crafting stuff.
 		if (!(_outputSlot.SlottedItem == null) || !(_currentCraftingRecipe == null))
 		{
-			_availableRecipes.ForEach(r => r.CanCraft = false);
+			AvailableRecipes.ForEach(r => r.CanCraft = false);
 			return;
 		}
 
-		foreach (CraftingRecipe recipe in _availableRecipes)
+		foreach (CraftingRecipe recipe in AvailableRecipes)
 		{
 			recipe.CanCraft = true;
 			// Check the storage module for each crafting component.

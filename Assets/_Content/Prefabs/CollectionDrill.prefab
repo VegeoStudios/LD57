@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -1233,7 +1233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 8
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -1345,7 +1345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -2002,7 +2002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}

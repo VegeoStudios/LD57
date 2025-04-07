@@ -56,6 +56,7 @@ public class CollectorDrillModule : ShipModule
     {
         float oreCollected = ore.Value * DrillingEfficiency;
 		ShipSystemsManager.Instance.StorageModule.StoredItems[ore.Item.Name] += Mathf.FloorToInt(oreCollected);
+        ShipSystemsManager.Instance.StorageModule.StoredItemsUIDirty = true;
 	}
 
     private void Awake()
