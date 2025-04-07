@@ -57,6 +57,10 @@ public class ShipSystemsManager : MonoBehaviour
 	/// Estimated time until out of coolant (time)
 	/// </summary>
 	public TimeSpan EstimatedCoolingDuration { get; protected set; }
+    /// <summary>
+    /// Time until losing the game from over  heating (s)
+    /// </summary>
+    public float OverheatTimeRemaining { get; protected set; }
 	#endregion Heat
 
 	#region Power
@@ -143,16 +147,21 @@ public class ShipSystemsManager : MonoBehaviour
     /// Target heading of ship (deg)
     /// </summary>
     public float TargetHeading { get; protected set; }
+
+    public bool PowerAlert = false;
+    public bool HeatAlert = false;
 	#endregion Telemetry
 	#endregion Properties
 
 	#region Constants
     // Absolute
     private const float _targetInteriorTemperature = 25f; // C
+    private const float _maxInteriorTemperature = 50f; // C
+    private const float _heatTimeToFail = 30; // s
 	private const float _ambientTemperatureRate = 30f / 1000f; // C/m
     private const float _mass = 2000f * 1000f; // kg
-    private const float _specificHeatCapacity = 300f; // J/kg-K
-    private const float _thermalConductivity = 3.5f; // W/m-K
+    private const float _specificHeatCapacity = 100f; // J/kg-K
+    private const float _thermalConductivity = 5f; // W/m-K
     private const float _surfaceArea = 500f; // m^2
     private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
@@ -164,8 +173,12 @@ public class ShipSystemsManager : MonoBehaviour
 	#endregion Constants
 
 	#region Fields
+    public AudioSource AlarmHeat = null;
+    public AudioSource AlarmPower = null;
 	public StorageModule StorageModule = null;
     public FoundryModule FoundryModule = null;
+
+    private float _heatTimeElapsed = 0f;
 
     // Not shown in inspector
     public List<ShipModule> ShipModules { get; private set; } = new List<ShipModule>();
@@ -222,28 +235,48 @@ public class ShipSystemsManager : MonoBehaviour
 	#region Update Logic
 	private void UpdatePower()
     {
-        ReactorModule.TargetPowerProduction = TotalPowerDemand = ShipModules.Select(mod => mod.PowerDemand).Sum();
+        ReactorModule.TargetPowerProduction = TotalPowerDemand = ShipModules.Where(mod => mod.IsActive).Select(mod => mod.PowerDemand).Sum();
 		FuelRemaining = ReactorModule.FuelRemaining;
 		TotalPowerProduction = ReactorModule.PowerProduction;
 		EstimatedPowerDuration = ReactorModule.EstimatedTimeRemaining;
 		OperationalEfficiency = 1f;
 
-		if (TotalPowerDemand > 0.1f)
+        if (!ReactorModule.IsActive)
+        {
+			// Ship is going into blackout!
+			foreach (ShipModule module in ShipModules.Where(m => m != ReactorModule))
+			{
+				module.IsActive = false;
+			}
+
+            AlarmHeat.Stop();
+            AlarmPower.Stop();
+            PowerAlert = false;
+            HeatAlert = false;
+		}
+		else
 		{
             float utilization = TotalPowerDemand / ReactorModule.MaximumPowerProduction;
             if (utilization > _blackoutThreshold)
             {
 				// Ship is going into blackout!
-				foreach (ShipModule module in ShipModules.Where(m => m != ReactorModule))
-				{
-					module.IsActive = false;
-				}
+				ReactorModule.IsActive = false;
 			}
             else if (utilization > 1f)
             {
                 // Ship is over-stressed and module efficiency will be reduced.
                 OperationalEfficiency = 2f - utilization;
-            }
+                if (!AlarmPower.isPlaying)
+                {
+					AlarmPower.Play();
+                    PowerAlert = true;
+				}
+			}
+            else
+            {
+				AlarmPower.Stop();
+				PowerAlert = false;
+			}
         }
 
 		ShipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
@@ -253,11 +286,37 @@ public class ShipSystemsManager : MonoBehaviour
     {
 		ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
-		TotalSystemsHeat = ShipModules.Select(mod => mod.HeatGeneration).Sum();
+		TotalSystemsHeat = ShipModules.Where(mod => mod.IsActive).Select(mod => mod.HeatGeneration).Sum();
 		CoolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
 		TotalCoolingLoad = CoolingModule.CoolingLoad;
         EstimatedCoolingDuration = CoolingModule.EstimatedTimeRemaining;
 		CoolantRemaining = CoolingModule.CoolantRemaining;
+
+        if (InternalTemperature > _maxInteriorTemperature)
+        {
+            // Heat warning.
+            _heatTimeElapsed += Time.fixedDeltaTime;
+            if (!AlarmHeat.isPlaying)
+            {
+				AlarmHeat.Play();
+                HeatAlert = true;
+			}
+		}
+        else
+        {
+            _heatTimeElapsed -= Time.fixedDeltaTime * 0.1f;
+			AlarmHeat.Stop();
+			HeatAlert = false;
+		}
+
+		_heatTimeElapsed = Mathf.Clamp(_heatTimeElapsed, 0f, _heatTimeToFail);
+        OverheatTimeRemaining = _heatTimeToFail - _heatTimeElapsed;
+        if (OverheatTimeRemaining <= 0f)
+        {
+            // Game over!
+            // TODO
+            Application.Quit();
+        }
 
 		// Determine internal temperature change, if any
 		float heatFlow = TotalSystemsHeat + AmbientHeatInflux - TotalCoolingLoad;
@@ -295,8 +354,6 @@ public class ShipSystemsManager : MonoBehaviour
     {
 		FathomCount++;
 		CurrentTier = 1 + FathomCount / _fathomsPerTier;
-
-		// TODO
 	}
 	#endregion Update Logic
 

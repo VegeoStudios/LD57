@@ -107,8 +107,7 @@ public class CoolingModule : ShipModule
 			_coolantSlot.SlottedItem = null;
 		}
 
-		float efficiency = 1 - (OperationalEfficiency * CoreFunctionEfficiency);
-		float coolantConsumed = Time.fixedDeltaTime * _currentCoolingLoad * efficiency / 3600f;
+		float coolantConsumed = Time.fixedDeltaTime * _currentCoolingLoad / (OperationalEfficiency * CoreFunctionEfficiency * 3600f);
 
 		if (!IsActive || coolantConsumed <= _tolerance)
 		{

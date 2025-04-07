@@ -107,7 +107,7 @@ public class ReactorModule : ShipModule
 			_fuelSlot.SlottedItem = null;
 		}
 
-		float fuelConsumed = Time.fixedDeltaTime * _currentPowerProduction * OperationalEfficiency / 3600f;
+		float fuelConsumed = Time.fixedDeltaTime * _currentPowerProduction / (OperationalEfficiency * CoreFunctionEfficiency * 3600f);
 
 		if (!IsActive || fuelConsumed <= _tolerance)
 		{
