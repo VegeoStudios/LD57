@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 8
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -524,7 +524,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1299335517655112863
 RectTransform:
   m_ObjectHideFlags: 0
@@ -542,7 +542,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9036011531542421319
 CanvasRenderer:
@@ -633,7 +633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 1
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -786,7 +786,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4244634079163309962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -804,7 +804,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6608507101944489697
 CanvasRenderer:
@@ -1008,6 +1008,8 @@ GameObject:
   - component: {fileID: 2179260402762231095}
   - component: {fileID: 3277755369967933381}
   - component: {fileID: 7749902090925635767}
+  - component: {fileID: 262845410360155401}
+  - component: {fileID: 3526022551717111371}
   m_Layer: 0
   m_Name: CoolingCenter
   m_TagString: Untagged
@@ -1218,6 +1220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 198e0d3ecd01ccb4e9b03122b2ba59ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ModuleLoop: {fileID: 0}
   _moduleName: Cooling Module
   _startingHeatGeneration: 0
   _startingPowerDemand: 10000
@@ -1231,6 +1234,7 @@ MonoBehaviour:
   - {fileID: 1629838165834779195}
   PowerToggleButton: {fileID: 863979023698535756}
   PowerButtonText: {fileID: 889288170639585648}
+  _isActive: 1
   OperationalEfficiency: 1
   _startingCoolingLoad: 10000
   _startingCoolant: 2000
@@ -1251,6 +1255,115 @@ MonoBehaviour:
   OverridePlayerInput: 0
   InteractionUI: {fileID: 6477189534042139461}
   _hoverVisual: {fileID: 7730800062680433422}
+--- !u!114 &262845410360155401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4618783106369795929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc0c8e838b755e48a59c29c3eb0a0eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!82 &3526022551717111371
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4618783106369795929}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -5619269181167208407, guid: 9cfef4c1fc9e3d1468f446bb5b1e1d4d, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 2d392d042a06e6144b78e5c449da3fac, type: 3}
+  m_Resource: {fileID: 8300000, guid: 2d392d042a06e6144b78e5c449da3fac, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 0.1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4637192190626043531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,7 +1415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -1414,7 +1527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -1601,7 +1714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820e9f581bb1e974bb2243011b661a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlottedItem: {fileID: 0}
+  StartingItem: {fileID: 0}
   AllowedItems: 4
   IsPlayerItemSlot: 0
   _spriteRenderer: {fileID: 0}
@@ -1926,7 +2039,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5705554224031355389
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1944,7 +2057,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4672039665785298563
 CanvasRenderer:
@@ -2137,7 +2250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8836824193592941830
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2155,7 +2268,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3152238654828526941
 CanvasRenderer:
@@ -2348,7 +2461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1951754113227415196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2366,7 +2479,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4884704483578447763
 CanvasRenderer:
@@ -2559,7 +2672,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8432571095792011140
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2577,7 +2690,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.49999997, y: -0.5}
+  m_SizeDelta: {x: -0.099999994, y: -0.10000001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1634409652532813351
 CanvasRenderer:

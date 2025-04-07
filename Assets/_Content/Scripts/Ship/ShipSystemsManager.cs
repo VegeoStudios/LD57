@@ -156,7 +156,7 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _surfaceArea = 500f; // m^2
     private const float _hullThickness = 1f; // m
     private const float _blackoutThreshold = 1.25f; // %
-    private const int _fathomDepth = 3000; // m
+    private const int _fathomDepth = 1000; // m
     private const int _fathomsPerTier = 3;
     // Derived
     private const float _internalTemperatureChangeRate = 1000f / (_specificHeatCapacity * _mass); // C/kWt-s
@@ -265,15 +265,22 @@ public class ShipSystemsManager : MonoBehaviour
 		InternalTemperature = Mathf.Clamp(InternalTemperature + temperatureDelta, _targetInteriorTemperature, float.MaxValue);
 	}
 
+    private bool _isSurfaced = true;
     private void UpdateTelemetry()
     {
-        float relativeDepth = _shipHead.position.x * 0.5f;
-		Depth = relativeDepth + FathomCount * _fathomDepth;
-        CurrentSpeed = EngineModule.CurrentSpeed;
+		Depth = _shipHead.position.x;
+		float relativeDepth = Depth - (FathomCount - 1) * _fathomDepth;
+		CurrentSpeed = EngineModule.CurrentSpeed;
         CurrentHeading = EngineModule.CurrentHeading;
         MaximumSpeed = EngineModule.MaximumSpeed;
         TargetSpeed = EngineModule.TargetSpeed;
         TargetHeading = EngineModule.TargetHeading;
+
+        if (Depth <= 0f && _isSurfaced)
+        {
+            _isSurfaced = false;
+			NextFathom();
+		}
 
 		if (relativeDepth >= _fathomDepth)
         {
@@ -286,8 +293,8 @@ public class ShipSystemsManager : MonoBehaviour
     /// </summary>
     private void NextFathom()
     {
-		CurrentTier = 1 + FathomCount / _fathomsPerTier;
 		FathomCount++;
+		CurrentTier = 1 + FathomCount / _fathomsPerTier;
 
 		// TODO
 	}
