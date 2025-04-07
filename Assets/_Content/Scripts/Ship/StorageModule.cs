@@ -89,6 +89,7 @@ public class StorageModule : ShipModule
 	
 	void FixedUpdate()
 	{
+		// We do not call the base UI update because this module never turns off.
 		UpdateStorageSlot();
 		ModuleIdle();
 	}

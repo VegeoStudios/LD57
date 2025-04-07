@@ -82,6 +82,7 @@ public class EngineModule : ShipModule
 	#region Events
 	void FixedUpdate()
 	{
+		UpdateUI();
 		if (IsActive)
 		{
 			UpdateHeading();

@@ -140,6 +140,7 @@ public class ReactorModule : ShipModule
 	#region Events
 	void FixedUpdate()
 	{
+		UpdateUI();
 		if (IsActive)
 		{
 			UpdateReactor();

@@ -20,8 +20,8 @@ public class CollectionTrigger : MonoBehaviour
             Ore ore = other.GetComponent<Ore>();
             if (ore != null)
             {
-                _collectorDrillModule.CollectOre(ore);
-                OreObjectPool.Instance.ReturnObject(ore);
+				_collectorDrillModule.CollectOre(ore);
+				OreObjectPool.Instance.ReturnObject(ore);
             }
         }
     }

@@ -104,6 +104,7 @@ public class FoundryModule : ShipModule
 	#region Events
 	void FixedUpdate()
 	{
+		UpdateUI();
 		if (IsActive)
 		{
 			UpdateCraftableRecipes();

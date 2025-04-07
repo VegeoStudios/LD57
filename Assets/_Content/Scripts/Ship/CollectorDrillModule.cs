@@ -36,6 +36,15 @@ public class CollectorDrillModule : ShipModule
     private float _targetScanProgress = 0f;
 
 
+    /// <summary>
+    /// Collects ore!
+    /// </summary>
+    public void CollectOre(Ore ore)
+    {
+        float oreCollected = ore.Value * CoreFunctionEfficiency * OperationalEfficiency;
+		ShipSystemsManager.Instance.StorageModule.StoredItems[ore.Item.Name] += Mathf.FloorToInt(oreCollected);
+	}
+
     private void Awake()
     {
         _interactable = GetComponent<Interactable>();
@@ -54,7 +63,12 @@ public class CollectorDrillModule : ShipModule
         ScanTexture.Apply();
     }
 
-    private void Update()
+	private void FixedUpdate()
+	{
+		UpdateUI();
+	}
+
+	private void Update()
     {
         if (_interactable.Interacting)
         {
@@ -130,13 +144,6 @@ public class CollectorDrillModule : ShipModule
         Gizmos.DrawLine(transform.position, transform.position + direction * CollectionRange);
         direction = Quaternion.Euler(0, 0, MaxAngle) * transform.up;
         Gizmos.DrawLine(transform.position, transform.position + direction * CollectionRange);
-    }
-
-    public void CollectOre(Ore ore)
-    {
-        // Logic to collect ore
-        Debug.Log($"Collected ore: {ore.name}");
-        // Add ore to inventory or perform other actions
     }
 
     private float ScanRay(float angle)

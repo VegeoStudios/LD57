@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// A ship module is an interactable core system of the ship.
@@ -19,12 +21,49 @@ public class ShipModule : MonoBehaviour
 	[SerializeField]
 	protected float _coreFunctionalEfficiency = 1f; // Core function, affected by tier
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
+	public Button PowerToggleButton = null;
+	public TextMeshProUGUI PowerButtonText = null;
 
 	// Not shown in inspector
 	protected bool _isActive = true;
+	protected bool _isActiveUIState = true;
 	#endregion Fields
 
 	#region Methods
+	/// <summary>
+	/// Very simple method to invert the active state.
+	/// </summary>
+	public void TogglePowerState()
+	{
+		_isActive = !_isActive;
+	}
+
+	/// <summary>
+	/// Must be called with other updates by child classes.
+	/// </summary>
+	protected void UpdateUI()
+	{
+		if (_isActiveUIState != IsActive)
+		{
+			// A toggle has occurred.
+			if (IsActive)
+			{
+				// Power is on
+				PowerToggleButton.image.color = new Color(0f, 0.784f, 0.196f, 0.5f);
+				PowerButtonText.text = "Power: On";
+			}
+			else
+			{
+				// Power is off
+				PowerToggleButton.image.color = new Color(0.784f, 0f, 0.196f, 0.5f);
+				PowerButtonText.text = "Power: Off";
+			}
+
+			// Finalize the toggle.
+			_isActiveUIState = _isActive = IsActive;
+		}
+	}
+
 	/// <summary>
 	/// Collects <see cref="Modifier"/> information from all slotted <see cref="Item"/>s.
 	/// </summary>
@@ -160,6 +199,11 @@ public class ShipModule : MonoBehaviour
 	#endregion Properties
 
 	#region Events
+	void FixedUpdate()
+	{
+		UpdateUI();
+	}
+
 	void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
