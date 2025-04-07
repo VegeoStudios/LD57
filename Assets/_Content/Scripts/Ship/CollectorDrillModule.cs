@@ -35,13 +35,25 @@ public class CollectorDrillModule : ShipModule
     private float _currentScanProgress = 0f;
     private float _targetScanProgress = 0f;
 
+    /// <summary>
+    /// Current ore recovery efficiency
+    /// </summary>
+    public float DrillingEfficiency
+    { 
+        get
+        {
+            return IsActive ? 
+                GetModifiedValue(ModifierStatType.ModuleEfficiency, CoreFunctionEfficiency * OperationalEfficiency) 
+                : 0f;
+        }
+    }
 
     /// <summary>
     /// Collects ore!
     /// </summary>
     public void CollectOre(Ore ore)
     {
-        float oreCollected = ore.Value * CoreFunctionEfficiency * OperationalEfficiency;
+        float oreCollected = ore.Value * DrillingEfficiency;
 		ShipSystemsManager.Instance.StorageModule.StoredItems[ore.Item.Name] += Mathf.FloorToInt(oreCollected);
 	}
 

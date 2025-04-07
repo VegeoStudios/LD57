@@ -192,29 +192,28 @@ public class ShipSystemsManager : MonoBehaviour
 		FuelRemaining = _reactorModule.FuelRemaining;
 		TotalPowerProduction = _reactorModule.PowerProduction;
 		EstimatedPowerDuration = _reactorModule.EstimatedTimeRemaining;
+		OperationalEfficiency = 1f;
 
-        // Check to see if we are over the power limit.
-        if (TotalPowerDemand > 0f && TotalPowerProduction < TotalPowerDemand)
-        {
-            float utilization = TotalPowerProduction / TotalPowerDemand;
-            if (utilization < 1f)
+		if (TotalPowerDemand > 0.1f)
+		{
+            float utilization = TotalPowerDemand / _reactorModule.MaximumPowerProduction;
+            if (utilization > _blackoutThreshold)
             {
-                OperationalEfficiency = 1f;
-            }
-            else if (utilization > _blackoutThreshold)
-            {
-                // Ship is going into blackout!
-                OperationalEfficiency = 0f;
+				// Ship is going into blackout!
+				foreach (ShipModule module in _shipModules.Where(m => m != _reactorModule))
+				{
+					module.IsActive = false;
+				}
 			}
-            else
+            else if (utilization > 1f)
             {
                 // Ship is over-stressed and module efficiency will be reduced.
                 OperationalEfficiency = 2f - utilization;
             }
-
-            _shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
         }
-    }
+
+		_shipModules.ForEach(mod => mod.OperationalEfficiency = OperationalEfficiency);
+	}
 
     private void UpdateHeat()
     {

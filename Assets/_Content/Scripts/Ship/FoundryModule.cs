@@ -33,7 +33,7 @@ public class FoundryModule : ShipModule
 			}
 
 			return GetModifiedValue(ModifierStatType.ModuleEfficiency,
-				_currentCraftingRecipe.CraftingTime / OperationalEfficiency);
+				_currentCraftingRecipe.CraftingTime * OperationalEfficiency * CoreFunctionEfficiency);
 		}
 	}
 	#endregion Properties

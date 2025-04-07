@@ -142,7 +142,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return _isActive && OperationalEfficiency > 0.001f;
+			return _isActive;
 		}
 		set
 		{
@@ -154,7 +154,7 @@ public class ShipModule : MonoBehaviour
 	/// </summary>
 	public float OperationalEfficiency;
 	/// <summary>
-	/// Core stat modifier depending on module tier and slotted upgrades (%)
+	/// Core stat modifier depending on module tier upgrades (%)
 	/// </summary>
 	/// <remarks>Not affected by enabled-ness.</remarks>
 	public float CoreFunctionEfficiency

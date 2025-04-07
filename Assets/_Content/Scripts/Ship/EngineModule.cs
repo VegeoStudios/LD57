@@ -46,7 +46,7 @@ public class EngineModule : ShipModule
 				return 0f;
 			}
 
-			return GetModifiedValue(ModifierStatType.ModuleEfficiency, CoreFunctionEfficiency * _startingMaximumSpeed);
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency, OperationalEfficiency * CoreFunctionEfficiency * _startingMaximumSpeed);
 		}
 	}
 	/// <summary>
