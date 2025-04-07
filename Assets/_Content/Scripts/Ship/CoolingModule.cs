@@ -77,14 +77,6 @@ public class CoolingModule : ShipModule
 	}
 	#endregion Properties
 
-	#region Construction
-	public CoolingModule() : base()
-	{
-		ShipSystemsManager.Instance.Callback(this);
-		_currentCoolant = _startingCoolant;
-	}
-	#endregion Construction
-
 	#region Methods
 	private void UpdateCooling()
 	{
@@ -109,10 +101,10 @@ public class CoolingModule : ShipModule
 	private void UpdateCoolant()
 	{
 		// Check if coolant is being loaded
-		if (!(_coolantSlot.SlottedItem is null) && _coolantSlot.SlottedItem.ItemType == ItemType.Coolant)
+		if (!(_coolantSlot.SlottedItem == null) && _coolantSlot.SlottedItem.ItemType == ItemType.Coolant)
 		{
 			_currentCoolant += _coolantSlot.SlottedItem.CoolantValue;
-			Destroy(_coolantSlot.RemoveSlottedItem().GetComponent<GameObject>());
+			_coolantSlot.SlottedItem = null;
 		}
 
 		float coolantConsumed = Time.fixedDeltaTime * _currentCoolingLoad * OperationalEfficiency / 3600f;
@@ -145,6 +137,7 @@ public class CoolingModule : ShipModule
 	}
 	#endregion Methods
 
+	#region Events
 	private void FixedUpdate()
 	{
 		if (IsActive)
@@ -158,4 +151,11 @@ public class CoolingModule : ShipModule
 			ModuleIdle();
 		}
 	}
+
+	void Start()
+	{
+		ShipSystemsManager.Instance.Callback(this);
+		_currentCoolant = _startingCoolant;
+	}
+	#endregion Events
 }

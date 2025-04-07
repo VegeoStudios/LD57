@@ -77,14 +77,6 @@ public class ReactorModule : ShipModule
 	}
 	#endregion Properties
 
-	#region Construction
-	public ReactorModule() : base()
-	{
-		ShipSystemsManager.Instance.Callback(this);
-		_currentFuel = _startingReactorFuel;
-	}
-	#endregion Construction
-
 	#region Methods
 	private void UpdateReactor()
 	{
@@ -109,10 +101,10 @@ public class ReactorModule : ShipModule
 	private void UpdateFuel()
 	{
 		// Check if fuel is being loaded
-		if (!(_fuelSlot.SlottedItem is null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
+		if (!(_fuelSlot.SlottedItem == null) && _fuelSlot.SlottedItem.ItemType == ItemType.Fuel)
 		{
 			_currentFuel += _fuelSlot.SlottedItem.FuelValue;
-			Destroy(_fuelSlot.RemoveSlottedItem().GetComponent<GameObject>());
+			_fuelSlot.SlottedItem = null;
 		}
 
 		float fuelConsumed = Time.fixedDeltaTime * _currentPowerProduction * OperationalEfficiency / 3600f;
@@ -145,6 +137,7 @@ public class ReactorModule : ShipModule
 	}
 	#endregion Methods
 
+	#region Events
 	void FixedUpdate()
 	{
 		if (IsActive)
@@ -158,4 +151,11 @@ public class ReactorModule : ShipModule
 			ModuleIdle();
 		}
 	}
+
+	void Start()
+	{
+		ShipSystemsManager.Instance.Callback(this);
+		_currentFuel = _startingReactorFuel;
+	}
+	#endregion Events
 }

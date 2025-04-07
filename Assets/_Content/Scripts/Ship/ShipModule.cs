@@ -19,7 +19,7 @@ public class ShipModule : MonoBehaviour
 	[SerializeField]
 	protected float _coreFunctionalEfficiency = 1f; // Core function, affected by tier
 	public List<ItemSlot> ItemSlots = new List<ItemSlot>();
-	public CoreSlot CoreSlot = null;
+
 	// Not shown in inspector
 	protected bool _isActive = true;
 	#endregion Fields
@@ -34,7 +34,7 @@ public class ShipModule : MonoBehaviour
 
 		if (!ItemSlots.Contains(CoreSlot))
 		{
-			if (!(CoreSlot.SlottedItem is null))
+			if (!(CoreSlot.SlottedItem == null))
 			{
 				IEnumerable<Modifier> itemModifiers = CoreSlot.SlottedItem.Modifiers.Where(m => m.ModifiedStat == stat);
 				if (itemModifiers.Count() > 0)
@@ -46,7 +46,7 @@ public class ShipModule : MonoBehaviour
 
 		foreach (ItemSlot slot in ItemSlots)
 		{
-			if (!(slot.SlottedItem is null))
+			if (!(slot.SlottedItem == null))
 			{
 				IEnumerable<Modifier> itemModifiers = slot.SlottedItem.Modifiers.Where(m => m.ModifiedStat == stat);
 				if (itemModifiers.Count() > 0)
@@ -76,6 +76,16 @@ public class ShipModule : MonoBehaviour
 	#endregion Methods
 
 	#region Properties
+	/// <summary>
+	/// Core item controlling base efficiency value a.k.a tier.
+	/// </summary>
+	public ItemSlot CoreSlot
+	{ 
+		get
+		{
+			return ItemSlots.First(i => i.IsCoreSlot);
+		}
+	}
 	/// <summary>
 	/// The current tier of this module.
 	/// </summary>
@@ -149,10 +159,10 @@ public class ShipModule : MonoBehaviour
 	}
 	#endregion Properties
 
-	#region Construction
-	public ShipModule() : base()
+	#region Events
+	void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
 	}
-	#endregion Construction
+	#endregion Events
 }

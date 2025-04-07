@@ -78,6 +78,7 @@ public class EngineModule : ShipModule
 	}
 	#endregion Methods
 
+	#region Events
 	void FixedUpdate()
 	{
 		if (IsActive)
@@ -89,4 +90,10 @@ public class EngineModule : ShipModule
 			ModuleIdle();
 		}
 	}
+
+	void Start()
+	{
+		ShipSystemsManager.Instance.Callback(this);
+	}
+	#endregion Events
 }

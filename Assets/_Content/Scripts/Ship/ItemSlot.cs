@@ -8,6 +8,20 @@ using UnityEngine.UI;
 [Serializable]
 public class ItemSlot : MonoBehaviour
 {
+	#region Singleton
+	protected static ItemSlot _instance = null;
+	/// <summary>
+	/// The item slot connected to the player.
+	/// </summary>
+	public static ItemSlot PlayerItemSlot
+	{
+		get
+		{
+			return _instance;
+		}
+	}
+	#endregion Singleton
+
 	#region Fields
 	/// <summary>
 	/// The currently slotted item object, if any.
@@ -17,7 +31,24 @@ public class ItemSlot : MonoBehaviour
 	/// Describes what items are allowed in this slot.
 	/// </summary>
 	public ItemType AllowedItems = ItemType.Upgrade;
+	/// <summary>
+	/// Controls if this is the player's item slot or not.
+	/// </summary>
+	public bool IsPlayerItemSlot = false;
 	#endregion Fields
+
+	#region Properties
+	/// <summary>
+	/// Each module must have exactly one "core slot" to host tier upgrades.
+	/// </summary>
+	public bool IsCoreSlot
+	{
+		get
+		{
+			return (AllowedItems & ItemType.TierCore) > 0;
+		}
+	}
+	#endregion Properties
 
 	#region References
 	[SerializeField]
@@ -27,64 +58,66 @@ public class ItemSlot : MonoBehaviour
     #endregion References
 
     #region Events
-	private void OnEnable()
+	void OnEnable()
 	{
 		UpdateSprite();
 	}
-    #endregion Events
 
-    #region Methods
-    /// <summary>
-    /// Determines if the passed item can be received by this slot.
-    /// </summary>
-    public virtual bool CanReceiveItem(Item item)
+	void Awake()
 	{
-		return (SlottedItem is null) && ((AllowedItems & item.ItemType) > 0);
-	}
-	/// <summary>
-	/// Removes the slotted item if it exists.
-	/// </summary>
-	/// <returns>The item that was slotted.</returns>
-	public Item RemoveSlottedItem()
-	{
-		Item removed = SlottedItem;
-		SlottedItem = null;
-
-		UpdateSprite();
-
-        return removed;
-	}
-	/// <summary>
-	/// Attempts to insert the passed item.
-	/// </summary>
-	/// <returns>True if successful.</returns>
-	public bool InsertItem(Item item)
-	{
-		if (CanReceiveItem(item))
+		if (IsPlayerItemSlot)
 		{
-			SlottedItem = item;
-
-			UpdateSprite();
-
-            return true;
+			_instance = this;
 		}
-
-		return false;
 	}
+	#endregion Events
 
+	#region Methods
+	/// <summary>
+	/// Determines if the passed item can be received by this slot.
+	/// </summary>
+	public virtual bool CanReceiveItem(Item item)
+	{
+		return ((AllowedItems & item.ItemType) > 0) &&
+			(SlottedItem == null || (IsCoreSlot && item.Tier > SlottedItem.Tier));
+	}
     /// <summary>
     /// Attempts to swap the item in this slot with the item in the player item slot.
     /// </summary>
     public virtual void AttemptSwapWithPlayer()
 	{
-        if (PlayerItemSlot.Instance.CanReceiveItem(SlottedItem) && CanReceiveItem(PlayerItemSlot.Instance.SlottedItem))
+        if (SlottedItem == null)
 		{
-            Item temp = SlottedItem;
-			SlottedItem = PlayerItemSlot.Instance.SlottedItem;
-			PlayerItemSlot.Instance.SlottedItem = temp;
-			UpdateSprite();
-			PlayerItemSlot.Instance.UpdateSprite();
+			// This slot is empty, check if we can take player's item.
+			if (PlayerItemSlot.SlottedItem != null && CanReceiveItem(PlayerItemSlot.SlottedItem))
+			{
+				SlottedItem = PlayerItemSlot.SlottedItem;
+				PlayerItemSlot.SlottedItem = null;
+			}
 		}
+		else if (IsCoreSlot)
+		{
+			// This is a core slot! Cores are destroyed when replaced.
+			if (PlayerItemSlot.SlottedItem != null &&
+				PlayerItemSlot.CanReceiveItem(SlottedItem) &&
+				CanReceiveItem(PlayerItemSlot.SlottedItem))
+			{
+				SlottedItem = PlayerItemSlot.SlottedItem;
+				PlayerItemSlot.SlottedItem = null;
+			}
+		}
+		else if (PlayerItemSlot.SlottedItem == null)
+		{
+			// Player isn't carrying anything, can they pick up from this slot?
+			if (PlayerItemSlot.CanReceiveItem(SlottedItem))
+			{
+				PlayerItemSlot.SlottedItem = SlottedItem;
+				SlottedItem = null;
+			}
+		}
+
+		UpdateSprite();
+		PlayerItemSlot.UpdateSprite();
 	}
 
 	/// <summary>

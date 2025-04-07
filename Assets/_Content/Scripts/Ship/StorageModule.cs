@@ -57,7 +57,7 @@ public class StorageModule : ShipModule
 		if (CanRetrieveItem)
 		{
 			Item item = ItemPrefabs.First(i => i.Name == itemName);
-			result = _storageSlot.InsertItem(item);
+			result = _storageSlot.SlottedItem = item;
 		}
 
 		UpdateStorageSlot();
@@ -66,7 +66,7 @@ public class StorageModule : ShipModule
 
 	private void UpdateStorageSlot()
 	{
-		CanRetrieveItem = _storageSlot.SlottedItem is null;
+		CanRetrieveItem = _storageSlot.SlottedItem == null;
 
 		if (_itemRetrieved)
 		{
@@ -81,9 +81,16 @@ public class StorageModule : ShipModule
 	}
 	#endregion Methods
 
+	#region Events
+	void Start()
+	{
+		ShipSystemsManager.Instance.Callback(this);
+	}
+	
 	void FixedUpdate()
 	{
 		UpdateStorageSlot();
 		ModuleIdle();
 	}
+	#endregion Events
 }

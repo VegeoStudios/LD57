@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0245a3168b49ff84c9322c7e1a45fc76, type: 3}
-  m_Name: SupercooledH2O
+  m_Name: Subcooled Water
   m_EditorClassIdentifier: 
-  Name: Supercooled H2O
-  Description: 
-  Tier: 1
+  Name: Subcooled Water
+  Description: H2O brought to a sub-freezing temperature locked in the liquid phase
+    under extreme pressure.
+  Tier: 0
   Sprite: {fileID: 8033092973025764044, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
-  ItemType: 6
-  CoolantValue: 10
+  Color: {r: 0, g: 0, b: 0, a: 0}
+  ItemType: 1
+  CoolantValue: 300
   FuelValue: 0
   Modifiers: []

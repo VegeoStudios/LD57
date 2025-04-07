@@ -18,24 +18,10 @@ public class ShipSystemsManager : MonoBehaviour
     { 
         get
         {
-            return _instance ?? (_instance = new ShipSystemsManager());
-        }
-        set
-        {
-            _instance = value;
+            return _instance;
         }
     }
 	#endregion Singleton
-
-	#region Construction
-    /// <summary>
-    /// Creates a new ship systems manager.
-    /// </summary>
-    public ShipSystemsManager() : base()
-    {
-        Instance = this;
-	}
-    #endregion Construction
 
     #region References
     [SerializeField] private Transform _shipHead;
@@ -272,10 +258,17 @@ public class ShipSystemsManager : MonoBehaviour
 	}
 	#endregion Update Logic
 
-    void FixedUpdate()
+	#region Events
+	void FixedUpdate()
     {
         UpdatePower();
         UpdateTelemetry();
         UpdateHeat();
     }
+
+	void Awake()
+	{
+        _instance = this;
+	}
+	#endregion Events
 }

@@ -27,7 +27,7 @@ public class FoundryModule : ShipModule
 	{
 		get
 		{
-			if (_currentCraftingRecipe is null || !IsActive)
+			if (_currentCraftingRecipe == null || !IsActive)
 			{
 				return 0f;
 			}
@@ -37,13 +37,6 @@ public class FoundryModule : ShipModule
 		}
 	}
 	#endregion Properties
-
-	#region Construction
-	public FoundryModule() : base()
-	{
-		ShipSystemsManager.Instance.Callback(this);
-	}
-	#endregion Construction
 
 	#region Methods
 	/// <summary>
@@ -62,17 +55,17 @@ public class FoundryModule : ShipModule
 
 	private void UpdateCraftingProgress()
 	{
-		if (!(_currentCraftingRecipe is null))
+		if (!(_currentCraftingRecipe == null))
 		{
 			if (_currentProcessingTimeElapsed >= CurrentTargetProcessingTime)
 			{
-				if (!(_outputSlot.SlottedItem is null))
+				if (!(_outputSlot.SlottedItem == null))
 				{
 					// Something is in the way.
 					return;
 				}
 
-				_outputSlot.InsertItem(_currentCraftingRecipe.Result.Item);
+				_outputSlot.SlottedItem = _currentCraftingRecipe.Result.Item;
 				_currentCraftingRecipe = null;
 				_currentProcessingTimeElapsed = 0f;
 			}
@@ -84,7 +77,7 @@ public class FoundryModule : ShipModule
 	private void UpdateCraftableRecipes()
 	{
 		// Slot is full or we're crafting stuff.
-		if (!(_outputSlot.SlottedItem is null) || !(_currentCraftingRecipe is null))
+		if (!(_outputSlot.SlottedItem == null) || !(_currentCraftingRecipe == null))
 		{
 			_availableRecipes.ForEach(r => r.CanCraft = false);
 			return;
@@ -108,6 +101,7 @@ public class FoundryModule : ShipModule
 	}
 	#endregion Methods
 
+	#region Events
 	void FixedUpdate()
 	{
 		if (IsActive)
@@ -120,4 +114,10 @@ public class FoundryModule : ShipModule
 			ModuleIdle();
 		}
 	}
+
+	void Start()
+	{
+		ShipSystemsManager.Instance.Callback(this);
+	}
+	#endregion Events
 }

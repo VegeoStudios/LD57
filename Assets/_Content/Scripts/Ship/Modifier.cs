@@ -19,22 +19,23 @@ public enum ModifierStatType
 /// </summary>
 public enum ModifierType
 { 
+    None = 0,
     /// <summary>
     /// Adds the magnitude to the value
     /// </summary>
-    Additive = 0,
+    Additive = 1,
     /// <summary>
     /// Adds a percent of the value to itself
     /// </summary>
-    AdditivePercent = 1,
+    AdditivePercent = 2,
     /// <summary>
     /// Multiplies by the value
     /// </summary>
-    Multiplicative = 2,
+    Multiplicative = 4,
     /// <summary>
     /// Value override
     /// </summary>
-    Absolute = 4,
+    Absolute = 8,
 }
 
 /// <summary>
