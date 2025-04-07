@@ -26,7 +26,7 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePauseMenu()
     {
-        _screens[0].SetActive(true);
+        if (_screens.Length > 0) _screens[0].SetActive(true);
         for (int i = 1; i < _screens.Length; i++)
         {
             _screens[i].SetActive(false);
@@ -35,7 +35,9 @@ public class PauseMenu : MonoBehaviour
         if (_canvas != null)
         {
             _canvas.enabled = !_canvas.enabled;
-            Time.timeScale = _canvas.enabled ? 0 : 1; // Pause or resume the game
+            Time.timeScale = _canvas.enabled ? 0 : 1;
+            // Pause audio
+            AudioListener.pause = _canvas.enabled;
         }
     }
 
@@ -47,5 +49,6 @@ public class PauseMenu : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1; // Resume the game before restarting
     }
 }
