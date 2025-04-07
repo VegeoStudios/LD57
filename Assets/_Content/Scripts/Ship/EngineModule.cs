@@ -24,7 +24,7 @@ public class EngineModule : ShipModule
 	/// <summary>
 	/// Heading/steering controller, +/-20 degrees
 	/// </summary>
-	public Slider Heading;
+	public UIWheel Heading;
 
 	[SerializeField]
 	protected float _startingMaximumSpeed; // m/s
@@ -71,7 +71,7 @@ public class EngineModule : ShipModule
 	private void UpdateHeading()
 	{
 		Locomotion.TargetSpeed = TargetSpeed = MaximumSpeed * Throttle.value;
-		Locomotion.TargetRotation = TargetHeading = Heading.value;
+		Locomotion.TargetRotation = TargetHeading = -Heading.value;
 	}
 
 	protected override void ModuleIdle()
