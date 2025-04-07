@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ores_0
+      name: Ores-Metal_0
       rect:
         serializedVersion: 2
         x: 0
@@ -113,16 +113,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 10953e2231bfd22a0800000000000000
-      internalID: -6760471406004971263
+      spriteID: 82166a635cf91e241af915781327f218
+      internalID: -400185447
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ores_1
+      name: Ores-Metal_1
       rect:
         serializedVersion: 2
         x: 64
@@ -137,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9439c48585d33894a8dfae26bef92153
-      internalID: 1624095180
+      spriteID: 9eed8920f68eb4040ac3e5dbda907165
+      internalID: -1306448249
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ores_2
+      name: Ores-Metal_2
       rect:
         serializedVersion: 2
         x: 128
@@ -159,14 +159,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a0ed918de8e9e04a9a30621ef40d0ba
-      internalID: 2025125389
+      spriteID: 590e9816b55a1e74bab352a6ac12a893
+      internalID: -1573442529
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ores_3
+      name: Ores-Metal_3
       rect:
         serializedVersion: 2
         x: 192
@@ -181,14 +181,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a35339ca14528ac42a46958f8432effa
-      internalID: 75603321
+      spriteID: e6c9dcfc94ff6804dbc1401be39d103c
+      internalID: -808260184
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ores_4
+      name: Ores-Metal_4
       rect:
         serializedVersion: 2
         x: 256
@@ -203,14 +203,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e09982bc9c41a6e4fa99606708999567
-      internalID: -505328596
+      spriteID: d17ac18a61bc13c47b5d0a1aa94f21b0
+      internalID: -517870946
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ores_5
+      name: Ores-Metal_5
       rect:
         serializedVersion: 2
         x: 320
@@ -225,30 +225,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 31474e861aeae4643bbeec798465db23
-      internalID: -1912144831
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ores_6
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ab8a0d7ddd9341f40b60cd2d9a88af73
-      internalID: 1041015198
+      spriteID: 80f08c4366d2b124daba18330e64f303
+      internalID: -407356609
       vertices: []
       indices: 
       edges: []
@@ -267,13 +245,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ores_0: -6760471406004971263
-      Ores_1: 1624095180
-      Ores_2: 2025125389
-      Ores_3: 75603321
-      Ores_4: -505328596
-      Ores_5: -1912144831
-      Ores_6: 1041015198
+      Ores-Metal_0: -400185447
+      Ores-Metal_1: -1306448249
+      Ores-Metal_2: -1573442529
+      Ores-Metal_3: -808260184
+      Ores-Metal_4: -517870946
+      Ores-Metal_5: -407356609
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

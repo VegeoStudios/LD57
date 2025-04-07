@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: Raw coolant
   Tier: 3
   Sprite: {fileID: -36534693, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
-  Color: {r: 0.3531061, g: 0.53647673, b: 0.6509434, a: 1}
+  Color: {r: 1, g: 1, b: 1, a: 1}
   OreType: 4
   ItemType: 16
   CoolantValue: 0

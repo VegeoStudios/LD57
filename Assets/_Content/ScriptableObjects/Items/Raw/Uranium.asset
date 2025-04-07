@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: Raw fuel
   Tier: 2
   Sprite: {fileID: 21300000, guid: 42abf0e209f31e2459ca9852a692e001, type: 3}
-  Color: {r: 0.3531061, g: 0.53647673, b: 0.6509434, a: 1}
+  Color: {r: 0.71621066, g: 0.8018868, b: 0.38203096, a: 1}
   OreType: 2
   ItemType: 16
   CoolantValue: 0
