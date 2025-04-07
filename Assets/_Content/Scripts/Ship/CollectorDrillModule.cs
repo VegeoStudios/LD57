@@ -5,16 +5,21 @@ public class CollectorDrillModule : ShipModule
     private const int _hitBufferSize = 20;
 
     public float CollectionRange = 25f;
-    public float ScanSpeed = 1f;
     public float DrillSpeed = 1f;
     public float RotationSpeed = 5f;
 
-    [SerializeField] private LayerMask _detectionLayerMask;
-    [SerializeField] private float _minAngle = -45f;
-    [SerializeField] private float _maxAngle = 45f;
+    public float ScanTime = 1f;
+    public int ScanTextureWidth = 90;
+    public int ScanTextureHeight = 50;
+    public float ScanValueMultiplier = 1f;
+    public float ScanNoise = 4f;
 
-    [SerializeField] private Transform _collectionOrigin;
-    [SerializeField] private Transform _drill;
+    [SerializeField] private LayerMask _detectionLayerMask;
+    public float MinAngle { get; private set; } = -45f;
+    public float MaxAngle { get; private set; } = 45f;
+
+    public Transform CollectionOrigin;
+    public Transform Drill;
 
     private RaycastHit2D[] _hitBuffer = new RaycastHit2D[_hitBufferSize];
 
@@ -24,11 +29,29 @@ public class CollectorDrillModule : ShipModule
     public bool DrillExtended => DrillDepth > 0.6f;
     public float DrillDepth { get; private set; } = 0.5f;
     public float DrillAngle { get; private set; } = 0f;
+    public Texture2D ScanTexture { get; private set; }
+
+    private int _currentScanIndex = 0;
+    private float _currentScanProgress = 0f;
+    private float _targetScanProgress = 0f;
+
 
     private void Awake()
     {
         _interactable = GetComponent<Interactable>();
         _collectionMinigameUI = _interactable.InteractionUI.GetComponent<CollectionMinigameUI>();
+
+        ScanTexture = new Texture2D(ScanTextureWidth, ScanTextureHeight);
+        ScanTexture.filterMode = FilterMode.Point;
+
+        for (int x = 0; x < ScanTextureWidth; x++)
+        {
+            for (int y = 0; y < ScanTextureHeight; y++)
+            {
+                ScanTexture.SetPixel(x, y, Color.black);
+            }
+        }
+        ScanTexture.Apply();
     }
 
     private void Update()
@@ -64,15 +87,38 @@ public class CollectorDrillModule : ShipModule
         }
 
         DrillDepth = Mathf.Clamp(DrillDepth, 0.5f, CollectionRange);
-        DrillAngle = Mathf.Clamp(DrillAngle, _minAngle, _maxAngle);
+        DrillAngle = Mathf.Clamp(DrillAngle, MinAngle, MaxAngle);
 
-        _drill.localPosition = new Vector3(0f, DrillDepth, 0f);
-        _collectionOrigin.localRotation = Quaternion.Euler(0f, 0f, DrillAngle);
+        Drill.localPosition = new Vector3(0f, DrillDepth, 0f);
+        CollectionOrigin.localRotation = Quaternion.Euler(0f, 0f, DrillAngle);
     }
 
     private void ScanningProcess()
     {
+        _targetScanProgress += ScanTime * Time.deltaTime;
 
+        
+        while (_currentScanProgress < _targetScanProgress && _currentScanIndex < ScanTextureWidth)
+        {
+            float value = ScanRay(MinAngle + _currentScanIndex * (MaxAngle - MinAngle) / ScanTextureWidth) * ScanValueMultiplier + Random.value * ScanNoise;
+
+            for (int y = 0; y < ScanTextureHeight; y++)
+            {
+                ScanTexture.SetPixel(ScanTextureWidth - _currentScanIndex, y, y < value ? Color.white : Color.black);
+            }
+
+            ScanTexture.Apply();
+
+            _currentScanIndex++;
+            _currentScanProgress += 1f / ScanTextureWidth;
+        }
+
+        if (_currentScanIndex >= ScanTextureWidth)
+        {
+            _currentScanIndex = 0;
+            _currentScanProgress = 0f;
+            _targetScanProgress = 0f;
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -80,9 +126,9 @@ public class CollectorDrillModule : ShipModule
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, CollectionRange);
         Gizmos.color = Color.red;
-        Vector3 direction = Quaternion.Euler(0, 0, _minAngle) * transform.up;
+        Vector3 direction = Quaternion.Euler(0, 0, MinAngle) * transform.up;
         Gizmos.DrawLine(transform.position, transform.position + direction * CollectionRange);
-        direction = Quaternion.Euler(0, 0, _maxAngle) * transform.up;
+        direction = Quaternion.Euler(0, 0, MaxAngle) * transform.up;
         Gizmos.DrawLine(transform.position, transform.position + direction * CollectionRange);
     }
 
@@ -93,19 +139,19 @@ public class CollectorDrillModule : ShipModule
         // Add ore to inventory or perform other actions
     }
 
-    private float DoScanRay(float angle)
+    private float ScanRay(float angle)
     {
         float output = 0f;
 
         Vector3 direction = Quaternion.Euler(0, 0, angle) * transform.up;
-        int hits = Physics2D.RaycastNonAlloc(_collectionOrigin.position, direction, _hitBuffer, CollectionRange, _detectionLayerMask);
+        int hits = Physics2D.RaycastNonAlloc(CollectionOrigin.position, direction, _hitBuffer, CollectionRange, _detectionLayerMask);
 
         for (int i = 0; i < hits; i++)
         {
             Ore ore = _hitBuffer[i].collider.GetComponent<Ore>();
             if (ore != null)
             {
-                output += ore.Value;
+                output += -_hitBuffer[i].normal.y;
             }
         }
 
