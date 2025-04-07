@@ -79,7 +79,7 @@ public class OreSpawner : MonoBehaviour
 
         if (item != null)
         {
-            float value = 1f;
+            float value = Random.value * 4;
             OreObjectPool.Instance.SpawnOre(spawnPosition, value, item);
         }
         else

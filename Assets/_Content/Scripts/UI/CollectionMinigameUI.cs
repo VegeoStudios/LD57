@@ -8,6 +8,7 @@ public class CollectionMinigameUI : MonoBehaviour
     [SerializeField] private RectTransform _angleCursor;
     [SerializeField] private RectTransform _depthCursor;
     [SerializeField] private TextMeshProUGUI _countText;
+    [SerializeField] private Transform _tooFastNotif;
 
     private CollectorDrillModule _collectorDrillModule;
 
@@ -23,6 +24,8 @@ public class CollectionMinigameUI : MonoBehaviour
 
     private void Update()
     {
+        _tooFastNotif.gameObject.SetActive(ShipSystemsManager.Instance.CurrentSpeed > _collectorDrillModule.MaxShipSpeed);
+
         float graphWidth = _graph.rectTransform.rect.width;
         float graphHeight = _graph.rectTransform.rect.height;
         _angleCursor.anchoredPosition = new Vector2(Mathf.InverseLerp(_collectorDrillModule.MaxAngle, _collectorDrillModule.MinAngle, _collectorDrillModule.DrillAngle) * graphWidth, 0);

@@ -1005,6 +1005,7 @@ MonoBehaviour:
   _angleCursor: {fileID: 4896381470011101904}
   _depthCursor: {fileID: 894767422643942138}
   _countText: {fileID: 1051383570918524462}
+  _tooFastNotif: {fileID: 0}
 --- !u!222 &3715569988870058502
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1519,6 +1520,7 @@ MonoBehaviour:
   ScanTextureHeight: 300
   ScanValueMultiplier: 100
   ScanNoise: 50
+  MaxShipSpeed: 0.1
   _detectionLayerMask:
     serializedVersion: 2
     m_Bits: 2048

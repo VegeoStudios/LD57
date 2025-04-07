@@ -13,6 +13,7 @@ public class CollectorDrillModule : ShipModule
     public int ScanTextureHeight = 50;
     public float ScanValueMultiplier = 1f;
     public float ScanNoise = 4f;
+    public float MaxShipSpeed = 0.2f;
 
     [SerializeField] private LayerMask _detectionLayerMask;
     public float MinAngle { get; private set; } = -45f;
@@ -82,6 +83,7 @@ public class CollectorDrillModule : ShipModule
 
 	private void Update()
     {
+        if (!IsActive) return;
         if (_interactable.Interacting)
         {
             ControlProcess();
