@@ -12,6 +12,7 @@ using TMPro;
 public class ShipModule : MonoBehaviour
 {
 	#region Fields
+	public AudioSource ModuleLoop;
 	[SerializeField]
 	protected string _moduleName = string.Empty;
 	[SerializeField]
@@ -207,6 +208,7 @@ public class ShipModule : MonoBehaviour
 	void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
+		ModuleLoop = this.GetComponent<AudioSource>();
 	}
 	#endregion Events
 }
