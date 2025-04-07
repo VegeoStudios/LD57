@@ -85,6 +85,10 @@ public class StorageModule : ShipModule
 	void Start()
 	{
 		ShipSystemsManager.Instance.Callback(this);
+		foreach (Item item in ItemPrefabs)
+		{
+			StoredItems.Add(item.Name, 0);
+		}
 	}
 	
 	void FixedUpdate()
