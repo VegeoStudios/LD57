@@ -33,7 +33,13 @@ public class ItemSlot : MonoBehaviour
 		get => _slottedItem;
         set
 		{
-            _slottedItem = value;
+			if (!IsPlayerItemSlot && _slottedItem != value)
+			{
+				// item was placed here, whoa dude!
+				ShipSystemsManager.Instance.PlayUIClickSound();
+			}
+
+			_slottedItem = value;
 			UpdateSprite();
         }
 	}

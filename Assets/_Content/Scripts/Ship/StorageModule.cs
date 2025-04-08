@@ -10,6 +10,8 @@ using UnityEngine;
 public class StorageModule : ShipModule
 {
 	#region Fields
+	public AudioSource UIClickSound;
+	public AudioSource UISubmitSound;
 	public Dictionary<string, int> StoredItems = new Dictionary<string, int>();
 	public bool StoredItemsUIDirty = true;
 	public List<Item> ItemPrefabs = new List<Item>();

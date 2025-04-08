@@ -13,6 +13,7 @@ public class CollectorDrill : MonoBehaviour
         {
             other.attachedRigidbody.bodyType = RigidbodyType2D.Kinematic;
             other.transform.SetParent(transform);
-        }
+			ShipSystemsManager.Instance.PlayUISubmitSound();
+		}
     }
 }

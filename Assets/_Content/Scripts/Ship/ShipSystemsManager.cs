@@ -9,6 +9,16 @@ using System.Linq;
 [Serializable]
 public class ShipSystemsManager : MonoBehaviour
 {
+    public void PlayUIClickSound()
+    {
+        StorageModule.UIClickSound.Play();
+    }
+
+    public void PlayUISubmitSound()
+    {
+		StorageModule.UISubmitSound.Play();
+	}
+
 	#region Singleton
 	private static ShipSystemsManager _instance = null;
     /// <summary>
