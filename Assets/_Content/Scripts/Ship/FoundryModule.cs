@@ -8,7 +8,9 @@ using System.Collections.Generic;
 [Serializable]
 public class FoundryModule : ShipModule
 {
-    #region Fields
+	#region Fields
+	public AudioSource CraftingSound = null;
+
     public List<CraftingRecipe> AvailableRecipes = new List<CraftingRecipe>();
     [SerializeField]
 	protected ItemSlot _outputSlot = null;
@@ -64,6 +66,7 @@ public class FoundryModule : ShipModule
 				if (!(_outputSlot.SlottedItem == null))
 				{
 					// Something is in the way.
+					CraftingSound.Stop();
 					return;
 				}
 
@@ -77,7 +80,16 @@ public class FoundryModule : ShipModule
 				ShipSystemsManager.Instance.StorageModule.StoredItemsUIDirty = true;
             }
 
+			if (!CraftingSound.isPlaying)
+			{
+				CraftingSound.Play();
+			}
+
 			_currentProcessingTimeElapsed += Time.fixedDeltaTime;
+		}
+		else
+		{
+			CraftingSound.Stop();
 		}
 	}
 
