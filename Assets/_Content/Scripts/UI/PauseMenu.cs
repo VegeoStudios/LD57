@@ -50,7 +50,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Time.timeScale = 1; // Resume the game before restarting
+		Time.timeScale = 1; // Resume the game before restarting
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
