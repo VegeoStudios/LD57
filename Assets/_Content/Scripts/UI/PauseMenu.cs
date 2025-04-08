@@ -18,6 +18,8 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        if (VictoryScreen.Activated) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePauseMenu();
