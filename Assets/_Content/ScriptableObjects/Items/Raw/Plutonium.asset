@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Plutonium
   Description: Raw fuel
   Tier: 3
-  Sprite: {fileID: 21300000, guid: 42abf0e209f31e2459ca9852a692e001, type: 3}
+  Sprite: {fileID: 1078913549, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 0.56199896, g: 0.7735849, b: 0.5582948, a: 1}
   OreType: 2
   ItemType: 16

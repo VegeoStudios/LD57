@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Water
   Description: Raw coolant
   Tier: 1
-  Sprite: {fileID: -36534693, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
+  Sprite: {fileID: -1861649023, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 0.28439835, g: 0.5141302, b: 0.7830189, a: 1}
   OreType: 4
   ItemType: 16

@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Small Water Tank
   Description: Coolant refill
   Tier: 1
-  Sprite: {fileID: 8033092973025764044, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
+  Sprite: {fileID: 1101978412, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 0, g: 0, b: 0, a: 0}
   OreType: 0
   ItemType: 1

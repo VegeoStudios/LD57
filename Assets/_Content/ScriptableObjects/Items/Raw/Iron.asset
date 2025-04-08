@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Iron
   Description: Raw material
   Tier: 1
-  Sprite: {fileID: 21300000, guid: 42abf0e209f31e2459ca9852a692e001, type: 3}
+  Sprite: {fileID: -36534693, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 0.5660378, g: 0.31808394, b: 0.20558918, a: 1}
   OreType: 1
   ItemType: 16

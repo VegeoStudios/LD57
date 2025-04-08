@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Helium
   Description: Raw coolant
   Tier: 3
-  Sprite: {fileID: -36534693, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
+  Sprite: {fileID: 1727608230, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 1, g: 1, b: 1, a: 1}
   OreType: 4
   ItemType: 16

@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Titanium
   Description: Raw material
   Tier: 3
-  Sprite: {fileID: 21300000, guid: 42abf0e209f31e2459ca9852a692e001, type: 3}
+  Sprite: {fileID: 1082556457, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}
   Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
   OreType: 1
   ItemType: 16
