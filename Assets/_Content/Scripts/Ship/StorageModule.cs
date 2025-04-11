@@ -131,10 +131,12 @@ public class StorageModule : ShipModule
 		}
 
 		// DEBUG
+		/*
 		AddItem("Iron", 20);
 		AddItem("Manganese", 20);
 		AddItem("Water", 20);
 		AddItem("T1 Navigation Beacon", 5);
+		*/
     }
 	
 	void FixedUpdate()

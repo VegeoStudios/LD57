@@ -79,7 +79,7 @@ public class ItemSlot : MonoBehaviour
 		UpdateSprite();
 	}
 
-	void Awake()
+	void Start()
 	{
 		if (IsPlayerItemSlot)
 		{
@@ -129,6 +129,8 @@ public class ItemSlot : MonoBehaviour
         }
 		*/
         
+		/*
+
         if (SlottedItem == null)
 		{
 			// This slot is empty, check if we can take player's item.
@@ -170,8 +172,10 @@ public class ItemSlot : MonoBehaviour
             }
         }
 
-			UpdateSprite();
+		UpdateSprite();
 		PlayerItemSlot.UpdateSprite();
+
+		*/
 	}
 
 	/// <summary>
@@ -181,7 +185,7 @@ public class ItemSlot : MonoBehaviour
 	{
         if (_spriteRenderer != null)
         {
-            if (SlottedItem != null)
+            if (_slottedItem != null)
             {
                 _spriteRenderer.sprite = SlottedItem.Sprite;
                 _spriteRenderer.enabled = true;
@@ -195,7 +199,7 @@ public class ItemSlot : MonoBehaviour
 
         if (_image != null)
         {
-            if (SlottedItem != null)
+            if (_slottedItem != null)
             {
                 _image.sprite = SlottedItem.Sprite;
                 _image.enabled = true;

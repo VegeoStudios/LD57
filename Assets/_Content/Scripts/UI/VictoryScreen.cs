@@ -73,10 +73,5 @@ public class VictoryScreen : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
         }
-
-        yield return new WaitForSeconds(4f);
-
-        //reload the scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
