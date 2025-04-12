@@ -82,7 +82,7 @@ public class ItemSlot : MonoBehaviour
 		if (IsPlayerItemSlot)
 		{
 			_instance = this;
-		}
+		}	
     }
 	#endregion Events
 
@@ -99,7 +99,7 @@ public class ItemSlot : MonoBehaviour
 
 		if (IsCoreSlot)
 		{
-			return item.Tier >= SlottedItem.Tier;
+			return item.Tier >= (SlottedItem?.Tier ?? 0);
 		}
 
 		return AllowedItems.HasFlag(item.ItemType) && (SlottedItem == null || allowSwaps);
