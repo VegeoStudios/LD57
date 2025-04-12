@@ -64,7 +64,7 @@ public class VictoryScreen : MonoBehaviour
             yield return null;
         }
 
-        for (int i = 0; i < _victoryTexts.Length; i++)
+		for (int i = 0; i < _victoryTexts.Length; i++)
         {
             while (_victoryTexts[i].color.a < 1f)
             {
@@ -73,5 +73,19 @@ public class VictoryScreen : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
         }
-    }
+
+		yield return new WaitForSeconds(5f);
+
+		for (int i = _victoryTexts.Length - 1; i >= 0; i--)
+		{
+			while (_victoryTexts[i].color.a > 0f)
+			{
+				_victoryTexts[i].color = new Color(_victoryTexts[i].color.r, _victoryTexts[i].color.g, _victoryTexts[i].color.b, _victoryTexts[i].color.a - Time.deltaTime * 2f);
+				yield return null;
+			}
+			yield return new WaitForSeconds(1f);
+		}
+
+        Application.Quit();
+	}
 }

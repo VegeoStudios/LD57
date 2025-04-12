@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0245a3168b49ff84c9322c7e1a45fc76, type: 3}
   m_Name: T3 Core
   m_EditorClassIdentifier: 
-  Name: Tier 3 Module Core
+  Name: T3 Module Core
   Description: Core replacement
   Tier: 3
   Sprite: {fileID: 1733490177, guid: 78935d10d8420be4e8144d7605bbb204, type: 3}

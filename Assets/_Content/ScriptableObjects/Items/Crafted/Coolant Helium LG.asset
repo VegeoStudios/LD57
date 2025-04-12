@@ -19,6 +19,6 @@ MonoBehaviour:
   Color: {r: 0, g: 0, b: 0, a: 0}
   OreType: 0
   ItemType: 1
-  CoolantValue: 2000
+  CoolantValue: 1000
   FuelValue: 0
   Modifiers: []

@@ -74,19 +74,15 @@ public class ItemSlot : MonoBehaviour
     #endregion References
 
     #region Events
-	void OnEnable()
-	{
-		UpdateSprite();
-	}
-
 	void Start()
 	{
+		SlottedItem = StartingItem;
+		UpdateSprite();
+
 		if (IsPlayerItemSlot)
 		{
 			_instance = this;
 		}
-
-        SlottedItem = StartingItem;
     }
 	#endregion Events
 
@@ -94,58 +90,29 @@ public class ItemSlot : MonoBehaviour
 	/// <summary>
 	/// Determines if the passed item can be received by this slot.
 	/// </summary>
-	public virtual bool CanReceiveItem(Item item)
+	public virtual bool CanReceiveItem(Item item, bool allowSwaps = true)
 	{
-		/*
+		if (item is null)
+		{
+			return false;
+		}
+
 		if (IsCoreSlot)
 		{
-			if (item == null) return false;
-			return item.ItemType == ItemType.TierCore &&
-                (SlottedItem == null || (SlottedItem.Tier < item.Tier));
-        }
-		return item == null || ((AllowedItems & item.ItemType) > 0);
-		*/
-        
-		return AllowedItems.HasFlag(item.ItemType) &&
-			(SlottedItem == null || (IsCoreSlot && item.Tier > SlottedItem.Tier));
-		
+			return item.Tier >= SlottedItem.Tier;
+		}
+
+		return AllowedItems.HasFlag(item.ItemType) && (SlottedItem == null || allowSwaps);
     }
     /// <summary>
     /// Attempts to swap the item in this slot with the item in the player item slot.
     /// </summary>
     public virtual void AttemptSwapWithPlayer()
 	{
-		/*
-		Item itemToGive = IsCoreSlot ? null : SlottedItem;
-		Debug.Log("PlayerItemSlot.CanReceiveItem(itemToGive): " + PlayerItemSlot.CanReceiveItem(itemToGive));
-        Debug.Log("CanReceiveItem(PlayerItemSlot.SlottedItem): " + CanReceiveItem(PlayerItemSlot.SlottedItem));
-        if (PlayerItemSlot.CanReceiveItem(itemToGive) && CanReceiveItem(PlayerItemSlot.SlottedItem))
-        {
-            Item temp = itemToGive;
-            SlottedItem = PlayerItemSlot.SlottedItem;
-            PlayerItemSlot.SlottedItem = temp;
-            UpdateSprite();
-            PlayerItemSlot.UpdateSprite();
-        }
-		*/
-        
-		/*
-
-        if (SlottedItem == null)
+        if (SlottedItem == null || IsCoreSlot)
 		{
 			// This slot is empty, check if we can take player's item.
-			if (PlayerItemSlot.SlottedItem != null && CanReceiveItem(PlayerItemSlot.SlottedItem))
-			{
-				SlottedItem = PlayerItemSlot.SlottedItem;
-				PlayerItemSlot.SlottedItem = null;
-			}
-		}
-		else if (IsCoreSlot)
-		{
-			// This is a core slot! Cores are destroyed when replaced.
-			if (PlayerItemSlot.SlottedItem != null &&
-				PlayerItemSlot.CanReceiveItem(SlottedItem) &&
-				CanReceiveItem(PlayerItemSlot.SlottedItem))
+			if (CanReceiveItem(PlayerItemSlot.SlottedItem))
 			{
 				SlottedItem = PlayerItemSlot.SlottedItem;
 				PlayerItemSlot.SlottedItem = null;
@@ -174,8 +141,6 @@ public class ItemSlot : MonoBehaviour
 
 		UpdateSprite();
 		PlayerItemSlot.UpdateSprite();
-
-		*/
 	}
 
 	/// <summary>

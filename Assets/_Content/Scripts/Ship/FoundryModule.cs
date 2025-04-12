@@ -109,9 +109,8 @@ public class FoundryModule : ShipModule
 			foreach (CraftingComponent component in recipe.Ingredients)
 			{
 				int storedQuantity = ShipSystemsManager.Instance.StorageModule.StoredItems[component.Item.Name];
-				if (storedQuantity < component.Amount)
+				if (storedQuantity < component.Amount || component.Item.Tier > ShipSystemsManager.Instance.CurrentTier)
 				{
-					// We are inextricably poor
 					recipe.CanCraft = false;
 					break;
 				}

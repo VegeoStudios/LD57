@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917ef4bbd758c8f44b7e78cd9c0c6eac, type: 3}
   m_Name: Mod T4
   m_EditorClassIdentifier: 
-  Magnitude: 2
+  Magnitude: 3
   ModifiedStat: 8
-  ModifierType: 2
+  ModifierType: 4

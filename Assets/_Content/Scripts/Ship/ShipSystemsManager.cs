@@ -169,11 +169,11 @@ public class ShipSystemsManager : MonoBehaviour
     private const float _maxInteriorTemperature = 50f; // C
     private const float _heatTimeToFail = 30; // s
 	private const float _ambientTemperatureRate = 30f / 1000f; // C/m
-    private const float _mass = 2000f * 1000f; // kg
+    private const float _mass = 1500f * 1000f; // kg
     private const float _specificHeatCapacity = 100f; // J/kg-K
-    private const float _thermalConductivity = 5f; // W/m-K
-    private const float _surfaceArea = 500f; // m^2
-    private const float _hullThickness = 1f; // m
+    private const float _thermalConductivity = 8f; // W/m-K
+    private const float _surfaceArea = 750f; // m^2
+    private const float _hullThickness = 0.3f; // m
     private const float _blackoutThreshold = 1.25f; // %
     private const int _fathomDepth = 1000; // m
     private const int _fathomsPerTier = 3;
@@ -297,7 +297,8 @@ public class ShipSystemsManager : MonoBehaviour
 		ExternalTemperature = Depth * _ambientTemperatureRate + _targetInteriorTemperature;
 		AmbientHeatInflux = (ExternalTemperature - InternalTemperature) * _ambientHeatRate;
 		TotalSystemsHeat = ShipModules.Where(mod => mod.IsActive).Select(mod => mod.HeatGeneration).Sum();
-		CoolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat;
+        float hvacCoolingLoad = Mathf.Clamp((ExternalTemperature - InternalTemperature) * 75, 0f, float.MaxValue);
+		CoolingModule.TargetCoolingLoad = AmbientHeatInflux + TotalSystemsHeat + hvacCoolingLoad;
 		TotalCoolingLoad = CoolingModule.CoolingLoad;
         EstimatedCoolingDuration = CoolingModule.EstimatedTimeRemaining;
 		CoolantRemaining = CoolingModule.CoolantRemaining;

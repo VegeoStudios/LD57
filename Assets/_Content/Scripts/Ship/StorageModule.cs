@@ -68,15 +68,12 @@ public class StorageModule : ShipModule
 			_itemRetrieved = true;
         }
 
-		UpdateStorageSlot(true);
+		UpdateStorageSlot();
 	}
 
 	private void UpdateStorageSlot(bool verbose = false)
 	{
 		CanRetrieveItem = _storageSlot.SlottedItem == null;
-
-		if (verbose) Debug.Log("CanRetrieveItem: " + CanRetrieveItem);
-		if (verbose) Debug.Log("_itemRetrieved: " + _itemRetrieved);
 
         if (_itemRetrieved)
 		{
@@ -85,7 +82,6 @@ public class StorageModule : ShipModule
 		}
 		else if (!CanRetrieveItem && StoredItems.Count < StorageCapacity)
 		{
-			Debug.Log("Adding item to storage: " + _storageSlot.SlottedItem.Name);
             StoredItems[_storageSlot.SlottedItem.Name] += 1;
             StoredItemsUIDirty = true;
             _storageSlot.SlottedItem = null;

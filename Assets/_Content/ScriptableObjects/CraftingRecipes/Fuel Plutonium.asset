@@ -17,6 +17,6 @@ MonoBehaviour:
     Amount: 1
   Ingredients:
   - Item: {fileID: 11400000, guid: 357bb4d141961f54199e792e553164d4, type: 2}
-    Amount: 2
+    Amount: 4
   CraftingTime: 5
   CanCraft: 0

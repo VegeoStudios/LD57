@@ -17,14 +17,14 @@ MonoBehaviour:
     Amount: 1
   Ingredients:
   - Item: {fileID: 11400000, guid: 1ec6c6ed52c8095438f7503a10e6f87b, type: 2}
-    Amount: 10
+    Amount: 20
   - Item: {fileID: 11400000, guid: a63d76b70ecae27439fa10b0e7247624, type: 2}
-    Amount: 10
+    Amount: 20
   - Item: {fileID: 11400000, guid: dee64de7f6f213a44947b6cadcd851d4, type: 2}
-    Amount: 10
+    Amount: 20
   - Item: {fileID: 11400000, guid: 4786564f207881a49ac37a2b5d3f89c7, type: 2}
-    Amount: 5
+    Amount: 10
   - Item: {fileID: 11400000, guid: e447dfc61c283b44b8edc84b34f3dcb5, type: 2}
-    Amount: 5
+    Amount: 10
   CraftingTime: 20
   CanCraft: 0

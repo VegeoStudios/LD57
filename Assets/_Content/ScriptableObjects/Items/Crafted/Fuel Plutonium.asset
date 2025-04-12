@@ -20,5 +20,5 @@ MonoBehaviour:
   OreType: 0
   ItemType: 2
   CoolantValue: 0
-  FuelValue: 4000
+  FuelValue: 2000
   Modifiers: []

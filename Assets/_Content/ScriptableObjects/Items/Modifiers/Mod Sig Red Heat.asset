@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917ef4bbd758c8f44b7e78cd9c0c6eac, type: 3}
   m_Name: Mod Sig Red Heat
   m_EditorClassIdentifier: 
-  Magnitude: -0.5
+  Magnitude: 0.5
   ModifiedStat: 2
-  ModifierType: 2
+  ModifierType: 4

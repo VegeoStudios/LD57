@@ -74,7 +74,7 @@ public class ShipModule : MonoBehaviour
 
 		if (!ItemSlots.Contains(CoreSlot))
 		{
-			if (!(CoreSlot.SlottedItem == null))
+			if (!(CoreSlot?.SlottedItem == null))
 			{
 				IEnumerable<Modifier> itemModifiers = CoreSlot.SlottedItem.Modifiers.Where(m => m.ModifiedStat == stat);
 				if (itemModifiers.Count() > 0)
@@ -123,7 +123,7 @@ public class ShipModule : MonoBehaviour
 	{ 
 		get
 		{
-			return ItemSlots.First(i => i.IsCoreSlot);
+			return ItemSlots.FirstOrDefault(i => i.IsCoreSlot);
 		}
 	}
 	/// <summary>
@@ -133,7 +133,7 @@ public class ShipModule : MonoBehaviour
 	{
 		get
 		{
-			return CoreSlot.SlottedItem?.Tier ?? 0;
+			return CoreSlot?.SlottedItem?.Tier ?? 1;
 		}
 	}
 	/// <summary>
@@ -162,7 +162,8 @@ public class ShipModule : MonoBehaviour
 	{
 		get
 		{
-			return GetModifiedValue(ModifierStatType.CoreFunction, _coreFunctionalEfficiency);
+			return GetModifiedValue(ModifierStatType.ModuleEfficiency, _coreFunctionalEfficiency) *
+				GetModifiedValue(ModifierStatType.CoreFunction, _coreFunctionalEfficiency);
 		}
 	}
 	/// <summary>
